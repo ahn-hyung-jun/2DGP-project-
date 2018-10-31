@@ -6,14 +6,18 @@ from pico2d import *
 
 import game_framework
 from map import Map
+from hero import Hero
 import hero
 
 name = "MainState"
 
 maps = None
+hero = None
 
 def enter():
     global maps
+    global hero
+    hero = Hero()
     maps = [[Map(i,j) for i in range(100)] for j in range(100)]
 
 def exit():
@@ -37,10 +41,11 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
         else:
-            pass
+            hero.handle_event(event)
 
 
 def update():
+    hero.update()
     pass
 
 def draw():
@@ -49,6 +54,7 @@ def draw():
     for i in range(100):
         for j in range(100):
             maps[j][i].draw()
+    hero.draw()
     update_canvas()
 
 

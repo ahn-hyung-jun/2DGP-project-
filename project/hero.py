@@ -56,7 +56,7 @@ class IdleState:
 
     @staticmethod
     def draw(hero):
-        pass
+        hero.image.clip_draw(0, 0, 100, 100, hero.x, hero.y)
 
 
 
@@ -95,7 +95,7 @@ class RunState:
 
     @staticmethod
     def draw(hero):
-        pass
+        hero.image.clip_draw(0,0,100,100,hero.x,hero.y)
 
 
 next_state_table = {
@@ -109,7 +109,7 @@ class Hero:
 
     def __init__(self):
         self.x, self.y = 1600 / 2, 900/2
-        self.image = load_image('animation_sheet.png')
+        self.image = load_image('character-sprite-.png')
         self.hor_speed = 0
         self.ver_speed = 0
         self.dir_x = 0
