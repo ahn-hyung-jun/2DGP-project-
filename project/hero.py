@@ -21,7 +21,7 @@ FRAMES_PER_ACTION = 8
 
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3, M_LEFT_DOWN = range(12)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3, M_LEFT_DOWN, M_LEFT_UP = range(13)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_d): RIGHT_DOWN,
@@ -35,7 +35,8 @@ key_event_table = {
     (SDL_KEYUP, SDLK_a): LEFT_UP,
     (SDL_KEYUP, SDLK_w): UP_UP,
     (SDL_KEYUP, SDLK_s): DOWN_UP,
-    (SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT): M_LEFT_DOWN
+    (SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT): M_LEFT_DOWN,
+    (SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT): M_LEFT_UP
 }
 
 
@@ -65,22 +66,37 @@ class IdleState:
 
         if event == DOWN_1:
             hero.state = 1
+            hero.fire_timer = 1000
         if event == DOWN_2:
             hero.state = 2
+            hero.fire_timer = 1000
         if event == DOWN_3:
             hero.state = 3
+            hero.fire_timer = 1000
 
     @staticmethod
     def exit(hero, event):
-        if event == M_LEFT_DOWN:
-            hero.fire_bullet()
-            print(hero.dir)
-
         pass
 
     @staticmethod
     def do(hero):
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
+
+        if hero.auto_fire == True:
+            if hero.state == 1:
+                hero.fire_timer -= hero.rifle_timer
+            elif hero.state == 2:
+                hero.fire_timer -= hero.shotgun_timer
+            elif hero.state == 3:
+                hero.fire_timer -= hero.bazuka_timer
+
+            if hero.fire_timer < 0:
+                hero.fire_timer = 1000
+                hero.fire_bullet()
+
+
+
+
         # fill here
 
     @staticmethod
@@ -116,20 +132,34 @@ class RunState:
 
         if event == DOWN_1:
             hero.state = 1
+            hero.fire_timer = 1000
         if event == DOWN_2:
             hero.state = 2
+            hero.fire_timer = 1000
         if event == DOWN_3:
             hero.state = 3
+            hero.fire_timer = 1000
 
     @staticmethod
     def exit(hero, event):
-        if event == M_LEFT_DOWN:
-            hero.fire_bullet()
         pass
 
     @staticmethod
     def do(hero):
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
+
+        if hero.auto_fire == True:
+            if hero.state == 1:
+                hero.fire_timer -= hero.rifle_timer
+            elif hero.state == 2:
+                hero.fire_timer -= hero.shotgun_timer
+            elif hero.state == 3:
+                hero.fire_timer -= hero.bazuka_timer
+
+            if hero.fire_timer < 0:
+                hero.fire_timer = 1000
+                hero.fire_bullet()
+
         hero.x += hero.hor_speed
         hero.y += hero.ver_speed
 
@@ -146,10 +176,10 @@ class RunState:
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP: RunState, DOWN_UP: RunState,
                 RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
-                DOWN_1 : IdleState, DOWN_2: IdleState, DOWN_3: IdleState,M_LEFT_DOWN:IdleState},
+                DOWN_1 : IdleState, DOWN_2: IdleState, DOWN_3: IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP:IdleState, DOWN_UP: IdleState,
                LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState,
-               DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState, M_LEFT_DOWN: RunState}
+               DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
 class Hero:
@@ -158,6 +188,11 @@ class Hero:
         self.x, self.y = 800 / 2, 600/2
         self.image = load_image('hero_sprite.png')
         self.state = 1
+        self.auto_fire = False
+        self.fire_timer = 1000
+        self.rifle_timer = 500
+        self.shotgun_timer = 50
+        self.bazuka_timer = 20
         self.hor_speed = 0
         self.ver_speed = 0
         self.dir=0
@@ -168,8 +203,16 @@ class Hero:
 
 
     def fire_bullet(self):
-        bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
-        game_world.add_object(bullet, 1)
+        if(self.state == 1):
+            bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20))
+            game_world.add_object(bullet, 1)
+        if (self.state == 2):
+            for n in range(10):
+                bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
+                game_world.add_object(bullet, 1)
+        if (self.state == 3):
+            bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
+            game_world.add_object(bullet, 1)
         pass
 
 
@@ -193,9 +236,12 @@ class Hero:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
-        elif (event.type, event.button) in key_event_table:
-            key_event = key_event_table[(event.type, event.button)]
-            self.add_event(key_event)
+        if event.type == SDL_MOUSEBUTTONDOWN:
+            if event.button == SDL_BUTTON_LEFT:
+                self.auto_fire = True
+        elif event.type == SDL_MOUSEBUTTONUP:
+            if event.button == SDL_BUTTON_LEFT:
+                self.auto_fire = False
         elif event.type == SDL_MOUSEMOTION:
             global mouse_x, mouse_y
             mouse_x, mouse_y = event.x, 600 - 1 - event.y

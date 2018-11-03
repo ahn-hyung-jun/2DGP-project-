@@ -19,5 +19,5 @@ class Bullet:
         self.x += self.velocity_x*3
         self.y += self.velocity_y*3
 
-        #if self.x < 25 or self.x > 1600 - 25:
-        #    game_world.remove_object(self)
+        if self.x < 0 or self.x > 800 or self.y < 0 or self.y > 600:
+            game_world.remove_object(self)
