@@ -190,6 +190,7 @@ class Hero:
         self.image = load_image('hero_sprite.png')
         self.state = 1
         self.auto_fire = False
+        self.reload_time = 50
         self.fire_timer = 1000
         self.rifle_timer = 500
         self.shotgun_timer = 50
@@ -197,16 +198,20 @@ class Hero:
         self.hor_speed = 0
         self.ver_speed = 0
         self.dir=0
-        self.frame = 0
+        self.rifle_ammo = 30
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.font = load_font('ENCR10B.TTF', 16)
 
 
     def fire_bullet(self):
         if(self.state == 1):
             bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20))
             game_world.add_object(bullet, 1)
+            self.rifle_ammo -= 1
+            if self.rifle_ammo < 0:
+                pass
         if (self.state == 2):
             for n in range(10):
                 bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
@@ -231,6 +236,7 @@ class Hero:
 
     def draw(self):
         self.cur_state.draw(self)
+        self.font.draw(self.x - 60, self.y + 50, '(%3.2i / 30)' % self.rifle_ammo, (255, 255, 0))
 
 
     def handle_event(self, event):
