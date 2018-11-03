@@ -120,7 +120,8 @@ class IdleState:
             hero.fire_timer = 1000
             hero.fire_bullet()
 
-
+        hero.x += hero.hor_speed
+        hero.y += hero.ver_speed
 
 
         # fill here
@@ -230,7 +231,7 @@ next_state_table = {
                 RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
                 DOWN_1 : IdleState, DOWN_2: IdleState, DOWN_3: IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP:IdleState, DOWN_UP: IdleState,
-               LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState,
+               LEFT_DOWN: RunState, RIGHT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
                DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
