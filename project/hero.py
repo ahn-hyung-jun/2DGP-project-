@@ -4,6 +4,21 @@ import random
 
 import game_world
 
+
+
+# Hero Run Speed
+PIXEL_PER_METER =  (10.0/0.3)
+RUN_SPEED_KMPH = 20.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
+
+# Hero Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
+
+
 # Boy Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3 = range(11)
 
@@ -12,9 +27,9 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
-    (SDL_KEYDOWN,SDLK_1): DOWN_1,
-    (SDL_KEYDOWN,SDLK_2): DOWN_2,
-    (SDL_KEYDOWN,SDLK_3): DOWN_3,
+    (SDL_KEYDOWN, SDLK_1): DOWN_1,
+    (SDL_KEYDOWN, SDLK_2): DOWN_2,
+    (SDL_KEYDOWN, SDLK_3): DOWN_3,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
     (SDL_KEYUP, SDLK_UP): UP_UP,
@@ -29,22 +44,22 @@ class IdleState:
     @staticmethod
     def enter(hero, event):
         if event == RIGHT_DOWN:
-            hero.hor_speed += 1
+            hero.hor_speed += RUN_SPEED_PPS
         if event == LEFT_DOWN:
-            hero.hor_speed -= 1
+            hero.hor_speed -= RUN_SPEED_PPS
         if event == UP_DOWN:
-            hero.ver_speed +=1
+            hero.ver_speed += RUN_SPEED_PPS
         if event == DOWN_DOWN:
-            hero.ver_speed -= 1
+            hero.ver_speed -= RUN_SPEED_PPS
 
         if event == RIGHT_UP:
-            hero.hor_speed -= 1
+            hero.hor_speed -= RUN_SPEED_PPS
         if event == LEFT_UP:
-            hero.hor_speed += 1
+            hero.hor_speed += RUN_SPEED_PPS
         if event == UP_UP:
-            hero.ver_speed -= 1
+            hero.ver_speed -= RUN_SPEED_PPS
         if event == DOWN_UP:
-            hero.ver_speed += 1
+            hero.ver_speed += RUN_SPEED_PPS
 
 
     @staticmethod
@@ -61,29 +76,27 @@ class IdleState:
     def draw(hero):
         hero.image.clip_draw(0, 0, 100, 100, hero.x, hero.y)
 
-
-
 class RunState:
 
     @staticmethod
     def enter(hero, event):
         if event == RIGHT_DOWN:
-            hero.hor_speed += 1
+            hero.hor_speed += RUN_SPEED_PPS
         if event == LEFT_DOWN:
-            hero.hor_speed -= 1
+            hero.hor_speed -= RUN_SPEED_PPS
         if event == UP_DOWN:
-            hero.ver_speed += 1
+            hero.ver_speed += RUN_SPEED_PPS
         if event == DOWN_DOWN:
-            hero.ver_speed -= 1
+            hero.ver_speed -= RUN_SPEED_PPS
 
         if event == RIGHT_UP:
-            hero.hor_speed -= 1
+            hero.hor_speed -= RUN_SPEED_PPS
         if event == LEFT_UP:
-            hero.hor_speed += 1
+            hero.hor_speed += RUN_SPEED_PPS
         if event == UP_UP:
-            hero.ver_speed -= 1
+            hero.ver_speed -= RUN_SPEED_PPS
         if event == DOWN_UP:
-            hero.ver_speed += 1
+            hero.ver_speed += RUN_SPEED_PPS
 
 
     @staticmethod
@@ -113,6 +126,7 @@ class Hero:
     def __init__(self):
         self.x, self.y = 800 / 2, 600/2
         self.image = load_image('character-sprite-.png')
+        self.state = 1
         self.hor_speed = 0
         self.ver_speed = 0
         self.dir_x = 0
