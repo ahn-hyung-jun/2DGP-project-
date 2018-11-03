@@ -82,7 +82,14 @@ class IdleState:
     def do(hero):
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
 
-        if hero.auto_fire == True:
+        if hero.reloading == True:
+            hero.reload_time -= 1
+            if hero.reload_time < 0:
+                hero.reloading = False
+                hero.reload_time = 100
+                hero.rifle_ammo = 30
+
+        if hero.auto_fire == True and hero.reloading == False:
             if hero.state == 1:
                 hero.fire_timer -= hero.rifle_timer
             elif hero.state == 2:
@@ -190,6 +197,7 @@ class Hero:
         self.image = load_image('hero_sprite.png')
         self.state = 1
         self.auto_fire = False
+        self.reloading = False
         self.reload_time = 50
         self.fire_timer = 1000
         self.rifle_timer = 500
@@ -197,7 +205,7 @@ class Hero:
         self.bazuka_timer = 20
         self.hor_speed = 0
         self.ver_speed = 0
-        self.dir=0
+        self.dir = 0
         self.rifle_ammo = 30
         self.event_que = []
         self.cur_state = IdleState
@@ -211,7 +219,7 @@ class Hero:
             game_world.add_object(bullet, 1)
             self.rifle_ammo -= 1
             if self.rifle_ammo < 0:
-                pass
+                self.reloading = True
         if (self.state == 2):
             for n in range(10):
                 bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
