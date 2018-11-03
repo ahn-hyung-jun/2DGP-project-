@@ -1,6 +1,7 @@
 import random
 import json
 import os
+import game_world
 
 from pico2d import *
 
@@ -19,9 +20,10 @@ def enter():
     global hero
     hero = Hero()
     maps = [[Map(i,j) for i in range(100)] for j in range(100)]
+    game_world.add_object(hero, 1)
 
 def exit():
-    pass
+    game_world.clear()
 
 
 
@@ -45,8 +47,8 @@ def handle_events():
 
 
 def update():
-    hero.update()
-    pass
+    for game_object in game_world.all_objects():
+        game_object.update()
 
 def draw():
     clear_canvas()
@@ -54,7 +56,8 @@ def draw():
     for i in range(100):
         for j in range(100):
             maps[j][i].draw()
-    hero.draw()
+    for game_object in game_world.all_objects():
+        game_object.draw()
     update_canvas()
 
 
