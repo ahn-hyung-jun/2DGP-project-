@@ -8,12 +8,13 @@ from pico2d import *
 import game_framework
 from map import Map
 from hero import Hero
+
 import hero
 
 name = "MainState"
 
 maps = None
-hero = None
+
 
 def enter():
     global maps

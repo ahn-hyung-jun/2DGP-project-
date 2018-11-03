@@ -67,12 +67,18 @@ class IdleState:
         if event == DOWN_1:
             hero.state = 1
             hero.fire_timer = 1000
+            if hero.rifle_reloading == True:
+                hero.rifle_reload_time = 100
         if event == DOWN_2:
             hero.state = 2
             hero.fire_timer = 1000
+            if hero.shotgun_reloading == True:
+                hero.shotgun_reload_time = 100
         if event == DOWN_3:
             hero.state = 3
             hero.fire_timer = 1000
+            if hero.bazuka_reloading == True:
+                hero.bazuka_reload_time = 100
 
     @staticmethod
     def exit(hero, event):
@@ -81,25 +87,38 @@ class IdleState:
     @staticmethod
     def do(hero):
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
-
-        if hero.reloading == True:
-            hero.reload_time -= 1
-            if hero.reload_time < 0:
-                hero.reloading = False
-                hero.reload_time = 100
+        if hero.state == 1 and hero.rifle_reloading == True:
+            hero.rifle_reload_time -= 1
+            if hero.rifle_reload_time < 0:
+                hero.rifle_reloading = False
+                hero.rifle_reload_time = 100
                 hero.rifle_ammo = 30
 
-        if hero.auto_fire == True and hero.reloading == False:
-            if hero.state == 1:
-                hero.fire_timer -= hero.rifle_timer
-            elif hero.state == 2:
-                hero.fire_timer -= hero.shotgun_timer
-            elif hero.state == 3:
-                hero.fire_timer -= hero.bazuka_timer
+        elif hero.state == 2 and hero.shotgun_reloading == True:
+            hero.shotgun_reload_time -= 1
+            if hero.shotgun_reload_time < 0:
+                hero.shotgun_reloading = False
+                hero.shotgun_reload_time = 100
+                hero.shotgun_ammo = 8
 
-            if hero.fire_timer < 0:
-                hero.fire_timer = 1000
-                hero.fire_bullet()
+        elif hero.state == 3 and hero.bazuka_reloading == True:
+            hero.bazuka_reload_time -= 1
+            if hero.bazuka_reload_time < 0:
+                hero.bazuka_reloading = False
+                hero.bazuka_reload_time = 100
+                hero.bazuka_ammo = 3
+
+        if hero.auto_fire == True and hero.rifle_reloading == False and hero.state == 1:
+                hero.fire_timer -= hero.rifle_fire_speed
+        elif hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
+                hero.fire_timer -= hero.shotgun_fire_speed
+        elif hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
+                hero.fire_timer -= hero.bazuka_fire_speed
+
+
+        if hero.fire_timer < 0:
+            hero.fire_timer = 1000
+            hero.fire_bullet()
 
 
 
@@ -157,11 +176,11 @@ class RunState:
 
         if hero.auto_fire == True:
             if hero.state == 1:
-                hero.fire_timer -= hero.rifle_timer
+                hero.fire_timer -= hero.fire_timer
             elif hero.state == 2:
-                hero.fire_timer -= hero.shotgun_timer
+                hero.fire_timer -= hero.fire_timer
             elif hero.state == 3:
-                hero.fire_timer -= hero.bazuka_timer
+                hero.fire_timer -= hero.fire_timer
 
             if hero.fire_timer < 0:
                 hero.fire_timer = 1000
@@ -189,36 +208,37 @@ next_state_table = {
                DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
-class rifle:
-    pass
-
-class shotgun:
-    pass
-
-class bazuka:
-    pass
-
 class Hero:
-
     def __init__(self):
         self.x, self.y = 800 / 2, 600/2
         self.image = load_image('hero_sprite.png')
         self.state = 1
         self.auto_fire = False
-        self.reloading = False
-        self.reload_time = 50
         self.fire_timer = 1000
-        self.rifle_timer = 500
-        self.shotgun_timer = 50
-        self.bazuka_timer = 20
         self.hor_speed = 0
         self.ver_speed = 0
         self.dir = 0
-        self.rifle_ammo = 30
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         self.font = load_font('ENCR10B.TTF', 16)
+
+        self.rifle_ammo = 30
+        self.rifle_reloading = False
+        self.rifle_reload_time = 100
+        self.rifle_fire_speed = 500
+
+        self.shotgun_ammo = 8
+        self.shotgun_reloading = False
+        self.shotgun_reload_time = 100
+        self.shotgun_fire_speed = 100
+
+        self.bazuka_ammo = 3
+        self.bazuka_reloading = False
+        self.bazuka_reload_time = 100
+        self.bazuka_fire_speed = 50
+
+
 
 
     def fire_bullet(self):
@@ -226,16 +246,22 @@ class Hero:
             bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20))
             game_world.add_object(bullet, 1)
             self.rifle_ammo -= 1
-            if self.rifle_ammo < 0:
-                self.reloading = True
+            if self.rifle_ammo == 0:
+                self.rifle_reloading = True
         if (self.state == 2):
             for n in range(10):
                 bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
                 game_world.add_object(bullet, 1)
+            self.shotgun_ammo -= 1
+            if self.shotgun_ammo == 0:
+                self.shotgun_reloading = True
         if (self.state == 3):
             bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
             game_world.add_object(bullet, 1)
-        pass
+            self.bazuka_ammo -= 1
+            if self.bazuka_ammo < 0:
+                self.bazuka_reloading = True
+
 
 
 
