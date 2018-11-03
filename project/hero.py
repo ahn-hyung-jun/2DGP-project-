@@ -156,17 +156,17 @@ class Hero:
 
         self.rifle_ammo = 30
         self.rifle_reloading = False
-        self.rifle_reload_time = 100
+        self.rifle_reload_time = 50
         self.rifle_fire_speed = 500
 
         self.shotgun_ammo = 8
         self.shotgun_reloading = False
-        self.shotgun_reload_time = 100
+        self.shotgun_reload_time = 50
         self.shotgun_fire_speed = 100
 
         self.bazuka_ammo = 3
         self.bazuka_reloading = False
-        self.bazuka_reload_time = 100
+        self.bazuka_reload_time = 50
         self.bazuka_fire_speed = 50
 
 
