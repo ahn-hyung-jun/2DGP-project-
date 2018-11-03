@@ -41,100 +41,6 @@ key_event_table = {
 
 
 # Boy States
-
-class IdleState:
-
-    @staticmethod
-    def enter(hero, event):
-        if event == RIGHT_DOWN:
-            hero.hor_speed += RUN_SPEED_PPS
-        if event == LEFT_DOWN:
-            hero.hor_speed -= RUN_SPEED_PPS
-        if event == UP_DOWN:
-            hero.ver_speed += RUN_SPEED_PPS
-        if event == DOWN_DOWN:
-            hero.ver_speed -= RUN_SPEED_PPS
-
-        if event == RIGHT_UP:
-            hero.hor_speed -= RUN_SPEED_PPS
-        if event == LEFT_UP:
-            hero.hor_speed += RUN_SPEED_PPS
-        if event == UP_UP:
-            hero.ver_speed -= RUN_SPEED_PPS
-        if event == DOWN_UP:
-            hero.ver_speed += RUN_SPEED_PPS
-
-        if event == DOWN_1:
-            hero.state = 1
-            hero.fire_timer = 1000
-            if hero.rifle_reloading == True:
-                hero.rifle_reload_time = 100
-        if event == DOWN_2:
-            hero.state = 2
-            hero.fire_timer = 1000
-            if hero.shotgun_reloading == True:
-                hero.shotgun_reload_time = 100
-        if event == DOWN_3:
-            hero.state = 3
-            hero.fire_timer = 1000
-            if hero.bazuka_reloading == True:
-                hero.bazuka_reload_time = 100
-
-    @staticmethod
-    def exit(hero, event):
-        pass
-
-    @staticmethod
-    def do(hero):
-        hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
-        if hero.state == 1 and hero.rifle_reloading == True:
-            hero.rifle_reload_time -= 1
-            if hero.rifle_reload_time < 0:
-                hero.rifle_reloading = False
-                hero.rifle_reload_time = 100
-                hero.rifle_ammo = 30
-
-        elif hero.state == 2 and hero.shotgun_reloading == True:
-            hero.shotgun_reload_time -= 1
-            if hero.shotgun_reload_time < 0:
-                hero.shotgun_reloading = False
-                hero.shotgun_reload_time = 100
-                hero.shotgun_ammo = 8
-
-        elif hero.state == 3 and hero.bazuka_reloading == True:
-            hero.bazuka_reload_time -= 1
-            if hero.bazuka_reload_time < 0:
-                hero.bazuka_reloading = False
-                hero.bazuka_reload_time = 100
-                hero.bazuka_ammo = 3
-
-        if hero.auto_fire == True and hero.rifle_reloading == False and hero.state == 1:
-                hero.fire_timer -= hero.rifle_fire_speed
-        elif hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
-                hero.fire_timer -= hero.shotgun_fire_speed
-        elif hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
-                hero.fire_timer -= hero.bazuka_fire_speed
-
-
-        if hero.fire_timer < 0:
-            hero.fire_timer = 1000
-            hero.fire_bullet()
-
-        hero.x += hero.hor_speed
-        hero.y += hero.ver_speed
-
-
-        # fill here
-
-    @staticmethod
-    def draw(hero):
-        if(hero.state == 1):
-            hero.image.clip_composite_draw(0,800,200,200,hero.dir,'',hero.x,hero.y,100,100)
-        elif(hero.state == 2):
-            hero.image.clip_composite_draw(0, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
-        elif(hero.state == 3):
-            hero.image.clip_composite_draw(0, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
-
 class RunState:
 
     @staticmethod
@@ -227,10 +133,8 @@ class RunState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP: RunState, DOWN_UP: RunState,
-                RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
-                DOWN_1 : IdleState, DOWN_2: IdleState, DOWN_3: IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP:IdleState, DOWN_UP: IdleState,
+
+    RunState: {RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP:RunState, DOWN_UP: RunState,
                LEFT_DOWN: RunState, RIGHT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
                DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
@@ -246,7 +150,7 @@ class Hero:
         self.ver_speed = 0
         self.dir = 0
         self.event_que = []
-        self.cur_state = IdleState
+        self.cur_state = RunState
         self.cur_state.enter(self, None)
         self.font = load_font('ENCR10B.TTF', 16)
 
