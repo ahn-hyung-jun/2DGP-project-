@@ -182,6 +182,7 @@ next_state_table = {
                DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
+
 class Hero:
 
     def __init__(self):
