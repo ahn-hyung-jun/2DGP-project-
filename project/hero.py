@@ -159,12 +159,18 @@ class RunState:
         if event == DOWN_1:
             hero.state = 1
             hero.fire_timer = 1000
+            if hero.rifle_reloading == True:
+                hero.rifle_reload_time = 100
         if event == DOWN_2:
             hero.state = 2
             hero.fire_timer = 1000
+            if hero.shotgun_reloading == True:
+                hero.shotgun_reload_time = 100
         if event == DOWN_3:
             hero.state = 3
             hero.fire_timer = 1000
+            if hero.bazuka_reloading == True:
+                hero.bazuka_reload_time = 100
 
     @staticmethod
     def exit(hero, event):
@@ -173,18 +179,38 @@ class RunState:
     @staticmethod
     def do(hero):
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
+        if hero.state == 1 and hero.rifle_reloading == True:
+            hero.rifle_reload_time -= 1
+            if hero.rifle_reload_time < 0:
+                hero.rifle_reloading = False
+                hero.rifle_reload_time = 100
+                hero.rifle_ammo = 30
 
-        if hero.auto_fire == True:
-            if hero.state == 1:
-                hero.fire_timer -= hero.fire_timer
-            elif hero.state == 2:
-                hero.fire_timer -= hero.fire_timer
-            elif hero.state == 3:
-                hero.fire_timer -= hero.fire_timer
+        elif hero.state == 2 and hero.shotgun_reloading == True:
+            hero.shotgun_reload_time -= 1
+            if hero.shotgun_reload_time < 0:
+                hero.shotgun_reloading = False
+                hero.shotgun_reload_time = 100
+                hero.shotgun_ammo = 8
 
-            if hero.fire_timer < 0:
-                hero.fire_timer = 1000
-                hero.fire_bullet()
+        elif hero.state == 3 and hero.bazuka_reloading == True:
+            hero.bazuka_reload_time -= 1
+            if hero.bazuka_reload_time < 0:
+                hero.bazuka_reloading = False
+                hero.bazuka_reload_time = 100
+                hero.bazuka_ammo = 3
+
+        if hero.auto_fire == True and hero.rifle_reloading == False and hero.state == 1:
+                hero.fire_timer -= hero.rifle_fire_speed
+        elif hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
+                hero.fire_timer -= hero.shotgun_fire_speed
+        elif hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
+                hero.fire_timer -= hero.bazuka_fire_speed
+
+
+        if hero.fire_timer < 0:
+            hero.fire_timer = 1000
+            hero.fire_bullet()
 
         hero.x += hero.hor_speed
         hero.y += hero.ver_speed
@@ -259,7 +285,7 @@ class Hero:
             bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
             game_world.add_object(bullet, 1)
             self.bazuka_ammo -= 1
-            if self.bazuka_ammo < 0:
+            if self.bazuka_ammo == 0:
                 self.bazuka_reloading = True
 
 
@@ -278,7 +304,21 @@ class Hero:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.x - 60, self.y + 50, '(%3.2i / 30)' % self.rifle_ammo, (255, 255, 0))
+        if self.state == 1:
+            if self.rifle_reloading == False:
+                self.font.draw(self.x - 60, self.y + 50, '(R %3.2i / 30)' % self.rifle_ammo, (255, 255, 0))
+            elif self.rifle_reloading == True:
+                self.font.draw(self.x - 60, self.y + 50, '(R Reloading!)', (255, 255, 0))
+        elif self.state == 2:
+            if self.shotgun_reloading == False:
+                self.font.draw(self.x - 60, self.y + 50, '(S %3.2i / 8)' % self.shotgun_ammo, (255, 255, 0))
+            elif self.shotgun_reloading == True:
+                self.font.draw(self.x - 60, self.y + 50, '(S Reloading!)', (255, 255, 0))
+        elif self.state == 3:
+            if self.bazuka_reloading == False:
+                self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 3)' % self.bazuka_ammo, (255, 255, 0))
+            elif self.bazuka_reloading == True:
+                self.font.draw(self.x - 60, self.y + 50, '(B Reloading!)', (255, 255, 0))
 
 
     def handle_event(self, event):
