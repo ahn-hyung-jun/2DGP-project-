@@ -189,6 +189,14 @@ next_state_table = {
                DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
+class rifle:
+    pass
+
+class shotgun:
+    pass
+
+class bazuka:
+    pass
 
 class Hero:
 
