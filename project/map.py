@@ -16,4 +16,5 @@ class Map:
 
 
     def draw(self):
-        self.image.draw(800/2, 600/2)
+        #self.image.draw(800/2, 600/2)
+        pass

@@ -7,8 +7,8 @@ import game_world
 
 
 # Hero Run Speed
-PIXEL_PER_METER =  (10.0/0.3)
-RUN_SPEED_KMPH = 20.0
+PIXEL_PER_METER =  (1.0/0.3)
+RUN_SPEED_KMPH = 2.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
@@ -61,6 +61,12 @@ class IdleState:
         if event == DOWN_UP:
             hero.ver_speed += RUN_SPEED_PPS
 
+        if event == DOWN_1:
+            hero.state = 1
+        if event == DOWN_2:
+            hero.state = 2
+        if event == DOWN_3:
+            hero.state = 3
 
     @staticmethod
     def exit(hero, event):
@@ -98,7 +104,12 @@ class RunState:
         if event == DOWN_UP:
             hero.ver_speed += RUN_SPEED_PPS
 
-
+        if event == DOWN_1:
+            hero.state = 1
+        if event == DOWN_2:
+            hero.state = 2
+        if event == DOWN_3:
+            hero.state = 3
     @staticmethod
     def exit(hero, event):
         # fill here
@@ -116,9 +127,11 @@ class RunState:
 
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP: RunState, DOWN_UP: RunState,
-                RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState},
+                RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,
+                DOWN_1 : IdleState, DOWN_2: IdleState, DOWN_3: IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP:IdleState, DOWN_UP: IdleState,
-               LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState}
+               LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState,
+               DOWN_1: RunState, DOWN_2: RunState, DOWN_3: RunState}
 }
 
 class Hero:
