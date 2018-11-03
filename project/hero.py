@@ -5,13 +5,16 @@ import random
 import game_world
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN = range(8)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3 = range(11)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
+    (SDL_KEYDOWN,SDLK_1): DOWN_1,
+    (SDL_KEYDOWN,SDLK_2): DOWN_2,
+    (SDL_KEYDOWN,SDLK_3): DOWN_3,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
     (SDL_KEYUP, SDLK_UP): UP_UP,
@@ -108,7 +111,7 @@ next_state_table = {
 class Hero:
 
     def __init__(self):
-        self.x, self.y = 1600 / 2, 900/2
+        self.x, self.y = 800 / 2, 600/2
         self.image = load_image('character-sprite-.png')
         self.hor_speed = 0
         self.ver_speed = 0
