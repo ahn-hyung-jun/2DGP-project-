@@ -2,6 +2,7 @@ from pico2d import *
 import math
 import random
 
+from bullet import Bullet
 import game_world
 
 
@@ -23,18 +24,18 @@ FRAMES_PER_ACTION = 8
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3, M_LEFT_DOWN = range(12)
 
 key_event_table = {
-    (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
-    (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
-    (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
-    (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
+    (SDL_KEYDOWN, SDLK_d): RIGHT_DOWN,
+    (SDL_KEYDOWN, SDLK_a): LEFT_DOWN,
+    (SDL_KEYDOWN, SDLK_w): UP_DOWN,
+    (SDL_KEYDOWN, SDLK_s): DOWN_DOWN,
     (SDL_KEYDOWN, SDLK_1): DOWN_1,
     (SDL_KEYDOWN, SDLK_2): DOWN_2,
     (SDL_KEYDOWN, SDLK_3): DOWN_3,
-    (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
-    (SDL_KEYUP, SDLK_UP): UP_UP,
-    (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
-    (SDL_MOUSEBUTTONDOWN,SDL_BUTTON_LEFT): M_LEFT_DOWN
+    (SDL_KEYUP, SDLK_d): RIGHT_UP,
+    (SDL_KEYUP, SDLK_a): LEFT_UP,
+    (SDL_KEYUP, SDLK_w): UP_UP,
+    (SDL_KEYUP, SDLK_s): DOWN_UP,
+    (SDL_MOUSEBUTTONDOWN, SDL_BUTTON_LEFT): M_LEFT_DOWN
 }
 
 
@@ -71,17 +72,25 @@ class IdleState:
 
     @staticmethod
     def exit(hero, event):
-        # fill here
+        if event == M_LEFT_DOWN:
+            hero.fire_bullet()
+            print(hero.dir)
+
         pass
 
     @staticmethod
     def do(hero):
-        pass
+        hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
         # fill here
 
     @staticmethod
     def draw(hero):
-        hero.image.clip_draw(0, 0, 100, 100, hero.x, hero.y)
+        if(hero.state == 1):
+            hero.image.clip_composite_draw(0,800,200,200,hero.dir,'',hero.x,hero.y,100,100)
+        elif(hero.state == 2):
+            hero.image.clip_composite_draw(0, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+        elif(hero.state == 3):
+            hero.image.clip_composite_draw(0, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
 
 class RunState:
 
@@ -114,17 +123,24 @@ class RunState:
 
     @staticmethod
     def exit(hero, event):
-        # fill here
+        if event == M_LEFT_DOWN:
+            hero.fire_bullet()
         pass
 
     @staticmethod
     def do(hero):
+        hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
         hero.x += hero.hor_speed
         hero.y += hero.ver_speed
 
     @staticmethod
     def draw(hero):
-        hero.image.clip_draw(0,0,100,100,hero.x,hero.y)
+        if (hero.state == 1):
+            hero.image.clip_composite_draw(0, 800, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+        elif (hero.state == 2):
+            hero.image.clip_composite_draw(0, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+        elif (hero.state == 3):
+            hero.image.clip_composite_draw(0, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
 
 
 next_state_table = {
@@ -140,20 +156,20 @@ class Hero:
 
     def __init__(self):
         self.x, self.y = 800 / 2, 600/2
-        self.image = load_image('character-sprite-.png')
+        self.image = load_image('hero_sprite.png')
         self.state = 1
         self.hor_speed = 0
         self.ver_speed = 0
-        self.dir_x = 0
-        self.dir_y = 0
+        self.dir=0
         self.frame = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
 
-    def fire(self):
-        # fill here
+    def fire_bullet(self):
+        bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
+        game_world.add_object(bullet, 1)
         pass
 
 
@@ -177,7 +193,14 @@ class Hero:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
+        elif (event.type, event.button) in key_event_table:
+            key_event = key_event_table[(event.type, event.button)]
+            self.add_event(key_event)
         elif event.type == SDL_MOUSEMOTION:
-            pass
+            global mouse_x, mouse_y
+            mouse_x, mouse_y = event.x, 600 - 1 - event.y
+
+
+
 
 
