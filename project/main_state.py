@@ -18,14 +18,12 @@ maps = None
 
 
 def enter():
-    global maps
     global hero
 
     global enemy_genarate
     hero = Hero()
 
     enemy_genarate = Enemy_genarate()
-    #maps = [[Map(i,j) for i in range(100)] for j in range(100)]
     game_world.add_object(hero, 1)
 
     game_world.add_object(enemy_genarate, 0)
@@ -61,9 +59,6 @@ def update():
 def draw():
     clear_canvas()
 
-    #for i in range(100):
-    #    for j in range(100):
-    #        maps[j][i].draw()
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
