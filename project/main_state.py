@@ -8,6 +8,7 @@ from pico2d import *
 import game_framework
 from map import Map
 from hero import Hero
+from enemy import Enemy
 
 import hero
 
@@ -19,9 +20,12 @@ maps = None
 def enter():
     global maps
     global hero
+    global enemy
     hero = Hero()
-    maps = [[Map(i,j) for i in range(100)] for j in range(100)]
+    enemy = Enemy()
+    #maps = [[Map(i,j) for i in range(100)] for j in range(100)]
     game_world.add_object(hero, 1)
+    game_world.add_object(enemy, 1)
 
 def exit():
     game_world.clear()
@@ -54,9 +58,9 @@ def update():
 def draw():
     clear_canvas()
 
-    for i in range(100):
-        for j in range(100):
-            maps[j][i].draw()
+    #for i in range(100):
+    #    for j in range(100):
+    #        maps[j][i].draw()
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()

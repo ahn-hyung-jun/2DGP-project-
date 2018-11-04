@@ -176,20 +176,20 @@ class Hero:
     def fire_bullet(self):
         if(self.state == 1):
             bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20))
-            game_world.add_object(bullet, 1)
+            game_world.add_object(bullet, 2)
             self.rifle_ammo -= 1
             if self.rifle_ammo == 0:
                 self.rifle_reloading = True
         if (self.state == 2):
             for n in range(10):
                 bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
-                game_world.add_object(bullet, 1)
+                game_world.add_object(bullet, 2)
             self.shotgun_ammo -= 1
             if self.shotgun_ammo == 0:
                 self.shotgun_reloading = True
         if (self.state == 3):
             bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
-            game_world.add_object(bullet, 1)
+            game_world.add_object(bullet, 2)
             self.bazuka_ammo -= 1
             if self.bazuka_ammo == 0:
                 self.bazuka_reloading = True
