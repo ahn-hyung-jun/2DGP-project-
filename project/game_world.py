@@ -18,6 +18,10 @@ def clear():
         del o
     objects.clear()
 
+def remove_enemy(o):
+    if o in objects[1]:
+        objects[1].remove(o)
+        del o
 
 def all_objects():
     for i in range(len(objects)):
