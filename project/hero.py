@@ -5,8 +5,6 @@ import random
 from bullet import Bullet
 import game_world
 
-
-
 # Hero Run Speed
 PIXEL_PER_METER =  (1.0/0.3)
 RUN_SPEED_KMPH = 2.0
@@ -39,7 +37,11 @@ key_event_table = {
     (SDL_MOUSEBUTTONUP, SDL_BUTTON_LEFT): M_LEFT_UP
 }
 
+def find_x():
+    return x
 
+def find_y():
+    return y
 # Boy States
 class RunState:
 
@@ -118,19 +120,22 @@ class RunState:
         if hero.fire_timer < 0:
             hero.fire_timer = 1000
             hero.fire_bullet()
+            hero.frame = 1
 
         hero.x += hero.hor_speed
         hero.y += hero.ver_speed
-
+        global x, y
+        x = hero.x
+        y = hero.y
     @staticmethod
     def draw(hero):
         if (hero.state == 1):
-            hero.image.clip_composite_draw(0, 800, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+            hero.image.clip_composite_draw(0 + hero.frame*200, 800, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
         elif (hero.state == 2):
-            hero.image.clip_composite_draw(0, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+            hero.image.clip_composite_draw(0 + hero.frame * 200, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
         elif (hero.state == 3):
-            hero.image.clip_composite_draw(0, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
-
+            hero.image.clip_composite_draw(0 + hero.frame * 200, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+        hero.frame = 0
 
 next_state_table = {
 
@@ -149,6 +154,7 @@ class Hero:
         self.fire_timer = 1000
         self.hor_speed = 0
         self.ver_speed = 0
+        self.frame = 0
         self.dir = 0
         self.event_que = []
         self.cur_state = RunState
@@ -163,32 +169,32 @@ class Hero:
         self.shotgun_ammo = 8
         self.shotgun_reloading = False
         self.shotgun_reload_time = 50
-        self.shotgun_fire_speed = 100
+        self.shotgun_fire_speed = 50
 
         self.bazuka_ammo = 3
         self.bazuka_reloading = False
         self.bazuka_reload_time = 50
-        self.bazuka_fire_speed = 50
+        self.bazuka_fire_speed = 20
 
 
 
 
     def fire_bullet(self):
         if(self.state == 1):
-            bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20))
+            bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20), self.state, self.dir)
             game_world.add_object(bullet, 2)
             self.rifle_ammo -= 1
             if self.rifle_ammo == 0:
                 self.rifle_reloading = True
         if (self.state == 2):
-            for n in range(10):
-                bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20))
+            for n in range(7):
+                bullet = Bullet(self.x, self.y, mouse_x + random.randint(-20, 20), mouse_y + random.randint(-20, 20), self.state, self.dir)
                 game_world.add_object(bullet, 2)
             self.shotgun_ammo -= 1
             if self.shotgun_ammo == 0:
                 self.shotgun_reloading = True
         if (self.state == 3):
-            bullet = Bullet(self.x, self.y, mouse_x, mouse_y)
+            bullet = Bullet(self.x, self.y, mouse_x, mouse_y, self.state, self.dir)
             game_world.add_object(bullet, 2)
             self.bazuka_ammo -= 1
             if self.bazuka_ammo == 0:
@@ -240,8 +246,6 @@ class Hero:
         elif event.type == SDL_MOUSEMOTION:
             global mouse_x, mouse_y
             mouse_x, mouse_y = event.x, 600 - 1 - event.y
-
-
 
 
 

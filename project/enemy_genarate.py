@@ -10,9 +10,11 @@ import enemy
 from enemy import Enemy
 
 
+
 class Enemy_genarate:
     def __init__(self):
         self.enemy_num = 20
+        self.fuck = 0
 
     def update(self):
         if self.enemy_num > 0:
@@ -23,8 +25,10 @@ class Enemy_genarate:
         pass
 
     def generate(self):
-        enemy = Enemy(random.randint(0,800), random.randint(0,600))
+        enemy = Enemy(random.randint(0, 800), random.randint(0, 600))
         game_world.add_object(enemy, 1)
+
+
 
 
 
