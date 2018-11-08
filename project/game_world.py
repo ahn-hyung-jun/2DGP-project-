@@ -11,6 +11,7 @@ def remove_object(o):
         if o in objects[i]:
             objects[i].remove(o)
             del o
+            break
 
 
 def clear():
@@ -18,16 +19,12 @@ def clear():
         del o
     objects.clear()
 
-def remove_enemy(o):
-    if o in objects[1]:
-        objects[1].remove(o)
-        del o
-
 def all_objects():
     for i in range(len(objects)):
         for o in objects[i]:
             yield o
 
 def get_objects(i):
-    for o in objects[i]:
-        yield o
+    return objects[i]
+
+

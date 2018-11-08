@@ -49,7 +49,7 @@ class Enemy:
             pass
 
         if self.hp <= 0:
-            game_world.remove_enemy(self)
+            game_world.remove_object(self)
             enemy_genarate.Enemy_genarate.generate(self)
 
 
