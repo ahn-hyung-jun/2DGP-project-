@@ -2,13 +2,11 @@ from pico2d import *
 import math
 import random
 
-from bullet import Bullet
+
 import game_world
 import hero
 import enemy_genarate
-import bullet
-
-
+from bullet import Bullet
 
 # Hero Run Speed
 PIXEL_PER_METER =  (1.0/0.3)
@@ -24,8 +22,8 @@ FRAMES_PER_ACTION = 8
 
 
 class Enemy:
-    def __init__(self , x = 400 , y = 300):
-        self.hp = 100
+    def __init__(self , x , y ):
+        self.HP = 100
         self.x , self.y  = x,y
         self.fire_timer = 1000
         self.fire_speed = 10
@@ -34,21 +32,24 @@ class Enemy:
         self.dir = 0
 
     def fire_bullet(self):
-        pass
+        bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
+                        1, self.dir)
+        game_world.add_object(bullet, 3)
 
     def update(self):
         for game_object in game_world.get_objects(2):
             if math.sqrt((game_object.x - self.x)**2 + (game_object.y - self.y)**2 ) < 20:
-                self.hp -= game_object.damage
+                self.HP -= game_object.damage
                 game_world.remove_object(game_object)
         self.dir = math.atan2(hero.find_y() - self.y, hero.find_x() - self.x) - math.pi / 2
 
 
         self.fire_timer -= self.fire_speed
         if self.fire_timer < 0:
-            pass
+            self.fire_bullet()
+            self.fire_timer = 1000
 
-        if self.hp <= 0:
+        if self.HP <= 0:
             game_world.remove_object(self)
             enemy_genarate.Enemy_genarate.generate(self)
 
@@ -56,4 +57,4 @@ class Enemy:
 
     def draw(self):
         self.image.clip_composite_draw(0, 800, 200, 200, self.dir, '', self.x, self.y, 100, 100)
-        self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 100)' % self.hp, (255, 255, 0))
+        self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 100)' % self.HP, (255, 255, 0))

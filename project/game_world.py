@@ -1,7 +1,10 @@
 
 # layer 0: Background Objects
-# layer 1: Foreground Objects
-objects = [[],[],[]]
+# layer 1: Foreground Objects(Hero, Enemy, Boss)
+# layer 2: Hero bullet Objects
+# layer 3: Enemy bullet Objects
+
+objects = [[],[],[],[]]
 
 def add_object(o, layer):
     objects[layer].append(o)
@@ -13,7 +16,6 @@ def remove_object(o):
             del o
             break
 
-
 def clear():
     for o in all_objects():
         del o
@@ -24,6 +26,7 @@ def all_objects():
         for o in objects[i]:
             yield o
 
+#원하는 레이어에 있는 값들만 가져오기 위함. 2,3에는 총알만 들어있으니까.
 def get_objects(i):
     return objects[i]
 

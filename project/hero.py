@@ -18,7 +18,7 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-# Boy Event
+# Hero Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3, M_LEFT_DOWN, M_LEFT_UP = range(13)
 
 key_event_table = {
@@ -65,6 +65,7 @@ class RunState:
         if event == DOWN_UP:
             hero.ver_speed += RUN_SPEED_PPS
 
+        #1,2,3 버튼이 눌렸을때 스테이트를 바꾼다
         if event == DOWN_1:
             hero.state = 1
             hero.fire_timer = 1000
@@ -87,7 +88,9 @@ class RunState:
 
     @staticmethod
     def do(hero):
+        #마우스를 바라보는 라디안값을 구한다
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
+        #탄창을 전부 소징한후 재장전. 타이머를 줄이고 타이머가 0이되면 재장전 완료
         if hero.state == 1 and hero.rifle_reloading == True:
             hero.rifle_reload_time -= 1
             if hero.rifle_reload_time < 0:
@@ -109,6 +112,7 @@ class RunState:
                 hero.bazuka_reload_time = 100
                 hero.bazuka_ammo = 3
 
+        #지금 들고있는 총에따라 발사시간이 줄어든다.
         if hero.auto_fire == True and hero.rifle_reloading == False and hero.state == 1:
                 hero.fire_timer -= hero.rifle_fire_speed
         elif hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
@@ -116,26 +120,33 @@ class RunState:
         elif hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
                 hero.fire_timer -= hero.bazuka_fire_speed
 
-
+        #발사시간이 0이되면 발포. Hero의 발사클래스를 부르고 프레임을 바꿔 발포하는 애니매이션을 띄움
         if hero.fire_timer < 0:
             hero.fire_timer = 1000
             hero.fire_bullet()
             hero.frame = 1
 
+        #적군총알과의 충돌체크
+        for game_object in game_world.get_objects(3):
+            if math.sqrt((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20:
+                hero.HP -= game_object.damage
+                game_world.remove_object(game_object)
+
+        #실제 이동
         hero.x += hero.hor_speed
         hero.y += hero.ver_speed
+
+        #Hero의 x,y값을 넘겨주기 휘함
         global x, y
         x = hero.x
         y = hero.y
+
     @staticmethod
     def draw(hero):
-        if (hero.state == 1):
-            hero.image.clip_composite_draw(0 + hero.frame*200, 800, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
-        elif (hero.state == 2):
-            hero.image.clip_composite_draw(0 + hero.frame * 200, 600, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
-        elif (hero.state == 3):
-            hero.image.clip_composite_draw(0 + hero.frame * 200, 400, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
+        #Hero의 상태에따라 다른 스프라이트 출력
+        hero.image.clip_composite_draw(0 + hero.frame*200, 1000-200*hero.state, 200, 200, hero.dir, '', hero.x, hero.y, 100, 100)
         hero.frame = 0
+
 
 next_state_table = {
 
@@ -150,8 +161,6 @@ class Hero:
         self.HP = 100
         self.image = load_image('hero_sprite.png')
         self.state = 1
-        self.auto_fire = False
-        self.fire_timer = 1000
         self.hor_speed = 0
         self.ver_speed = 0
         self.frame = 0
@@ -161,16 +170,22 @@ class Hero:
         self.cur_state.enter(self, None)
         self.font = load_font('ENCR10B.TTF', 16)
 
+        self.auto_fire = False
+        self.fire_timer = 1000
+
+        #라이플에 관한 내용
         self.rifle_ammo = 30
         self.rifle_reloading = False
         self.rifle_reload_time = 50
         self.rifle_fire_speed = 500
 
+        #샷건에 관련된 내용
         self.shotgun_ammo = 8
         self.shotgun_reloading = False
         self.shotgun_reload_time = 50
         self.shotgun_fire_speed = 50
 
+        #바주카에 관련된 내용
         self.bazuka_ammo = 3
         self.bazuka_reloading = False
         self.bazuka_reload_time = 50
@@ -178,7 +193,7 @@ class Hero:
 
 
 
-
+    #총알 발사! Hero의 들고있는 총에따라 다른 방식과 스프라이트로 발포
     def fire_bullet(self):
         if(self.state == 1):
             bullet = Bullet(self.x, self.y, mouse_x+random.randint(-20,20), mouse_y + random.randint(-20,20), self.state, self.dir)
@@ -215,6 +230,7 @@ class Hero:
             self.cur_state.enter(self, event)
 
     def draw(self):
+        #Hero의 상태에따라 탄창을 띄워줌
         self.cur_state.draw(self)
         if self.state == 1:
             if self.rifle_reloading == False:

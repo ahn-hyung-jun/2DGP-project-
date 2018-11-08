@@ -13,7 +13,5 @@ class Map:
         self.size = 10
 
 
-
-
     def draw(self):
         pass
