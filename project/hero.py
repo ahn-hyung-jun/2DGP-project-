@@ -173,6 +173,8 @@ class Hero:
         self.auto_fire = False
         self.fire_timer = 1000
 
+        self.gun_state = {}
+
         #라이플에 관한 내용
         self.rifle_ammo = 30
         self.rifle_reloading = False
@@ -232,6 +234,7 @@ class Hero:
     def draw(self):
         #Hero의 상태에따라 탄창을 띄워줌
         self.cur_state.draw(self)
+        self.font.draw(0, 30, '(R %3.2i / 100)' % self.HP, (255, 255, 0))
         if self.state == 1:
             if self.rifle_reloading == False:
                 self.font.draw(self.x - 60, self.y + 50, '(R %3.2i / 30)' % self.rifle_ammo, (255, 255, 0))

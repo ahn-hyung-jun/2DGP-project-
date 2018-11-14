@@ -51,7 +51,7 @@ class Enemy:
 
         self.fire_timer -= self.fire_speed
         if self.fire_timer < 0:
-            self.fire_bullet()
+            #self.fire_bullet()
             self.fire_timer = 1000
 
         if self.HP <= 0:
