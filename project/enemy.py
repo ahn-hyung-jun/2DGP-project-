@@ -38,12 +38,12 @@ class Enemy:
 
     def update(self):
         for hero_bullet in game_world.get_objects(2):
-            if math.sqrt((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < 20:
+            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < 20**2:
                 if hero_bullet.state == 1 or hero_bullet.state == 2:
                     self.HP -= hero_bullet.damage
                 elif hero_bullet.state == 3:
                     for game_object in game_world.get_objects(1):
-                        if math.sqrt((game_object.x - self.x) ** 2 + (game_object.y - self.y) ** 2) < 100:
+                        if ((game_object.x - self.x) ** 2 + (game_object.y - self.y) ** 2) < 100**2:
                             game_object.HP -= hero_bullet.damage
                 game_world.remove_object(hero_bullet)
         self.dir = math.atan2(hero.find_y() - self.y, hero.find_x() - self.x) - math.pi / 2

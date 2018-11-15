@@ -129,7 +129,7 @@ class RunState:
 
         #적군총알과의 충돌체크
         for game_object in game_world.get_objects(3):
-            if math.sqrt((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20:
+            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2:
                 hero.HP -= game_object.damage
                 game_world.remove_object(game_object)
 
