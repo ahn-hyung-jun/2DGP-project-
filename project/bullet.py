@@ -1,14 +1,14 @@
 from pico2d import *
 import math
 import game_world
-
+import game_framework
 
 # Bullet Speed
-PIXEL_PER_METER =  (1.0/0.3)
-RUN_SPEED_KMPH = 2.0
-RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
-RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
-RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+GUN_SPEED_KMPH = 10.0  # Km / Hour
+GUN_SPEED_MPM = (GUN_SPEED_KMPH * 1000.0 / 60.0)
+GUN_SPEED_MPS = (GUN_SPEED_MPM / 60.0)
+GUN_SPEED_PPS = (GUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Bullet:
     image = None
@@ -33,8 +33,8 @@ class Bullet:
             self.image.clip_composite_draw(900-50, 965-50, 100, 100, self.dir, '', self.x, self.y, 40, 40)
 
     def update(self):
-        self.x += self.velocity_x*5
-        self.y += self.velocity_y*5
+        self.x += self.velocity_x*GUN_SPEED_PPS * game_framework.frame_time
+        self.y += self.velocity_y*GUN_SPEED_PPS * game_framework.frame_time
 
         if self.x < 0 or self.x > 800 or self.y < 0 or self.y > 600:
             game_world.remove_object(self)

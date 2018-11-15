@@ -1,13 +1,14 @@
 from pico2d import *
 import math
 import random
+import game_framework
 
 from bullet import Bullet
 import game_world
 
 # Hero Run Speed
-PIXEL_PER_METER =  (1.0/0.3)
-RUN_SPEED_KMPH = 2.0
+PIXEL_PER_METER =  (10.0/0.3)
+RUN_SPEED_KMPH = 10.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
@@ -133,8 +134,8 @@ class RunState:
                 game_world.remove_object(game_object)
 
         #실제 이동
-        hero.x += hero.hor_speed
-        hero.y += hero.ver_speed
+        hero.x += hero.hor_speed*game_framework.frame_time
+        hero.y += hero.ver_speed*game_framework.frame_time
 
         #Hero의 x,y값을 넘겨주기 휘함
         global x, y
