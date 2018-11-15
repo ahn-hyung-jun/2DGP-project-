@@ -25,7 +25,7 @@ class Enemy_genarate:
         pass
 
     def generate(self):
-        enemy = Enemy(random.randint(0, 800), random.randint(0, 600))
+        enemy = Enemy(random.randint(0, 1280), random.randint(0, 1024))
         game_world.add_object(enemy, 1)
 
 

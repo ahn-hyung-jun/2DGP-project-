@@ -14,7 +14,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
 
 # Hero Action Speed
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
@@ -93,21 +93,21 @@ class RunState:
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
         #탄창을 전부 소징한후 재장전. 타이머를 줄이고 타이머가 0이되면 재장전 완료
         if hero.state == 1 and hero.rifle_reloading == True:
-            hero.rifle_reload_time -= 1
+            hero.rifle_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
             if hero.rifle_reload_time < 0:
                 hero.rifle_reloading = False
                 hero.rifle_reload_time = 100
                 hero.rifle_ammo = 30
 
         elif hero.state == 2 and hero.shotgun_reloading == True:
-            hero.shotgun_reload_time -= 1
+            hero.shotgun_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
             if hero.shotgun_reload_time < 0:
                 hero.shotgun_reloading = False
                 hero.shotgun_reload_time = 100
                 hero.shotgun_ammo = 8
 
         elif hero.state == 3 and hero.bazuka_reloading == True:
-            hero.bazuka_reload_time -= 1
+            hero.bazuka_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
             if hero.bazuka_reload_time < 0:
                 hero.bazuka_reloading = False
                 hero.bazuka_reload_time = 100
@@ -158,7 +158,7 @@ next_state_table = {
 
 class Hero:
     def __init__(self):
-        self.x, self.y = 800 / 2, 600/2
+        self.x, self.y = 1280 / 2, 1024/2
         self.HP = 100
         self.image = load_image('hero_sprite.png')
         self.state = 1
@@ -179,19 +179,19 @@ class Hero:
         #라이플에 관한 내용
         self.rifle_ammo = 30
         self.rifle_reloading = False
-        self.rifle_reload_time = 50
+        self.rifle_reload_time = 25
         self.rifle_fire_speed = 500
 
         #샷건에 관련된 내용
         self.shotgun_ammo = 8
         self.shotgun_reloading = False
-        self.shotgun_reload_time = 50
+        self.shotgun_reload_time = 25
         self.shotgun_fire_speed = 50
 
         #바주카에 관련된 내용
         self.bazuka_ammo = 3
         self.bazuka_reloading = False
-        self.bazuka_reload_time = 50
+        self.bazuka_reload_time = 25
         self.bazuka_fire_speed = 20
 
 
@@ -265,7 +265,7 @@ class Hero:
                 self.auto_fire = False
         elif event.type == SDL_MOUSEMOTION:
             global mouse_x, mouse_y
-            mouse_x, mouse_y = event.x, 600 - 1 - event.y
+            mouse_x, mouse_y = event.x, 1024 - event.y
 
 
 

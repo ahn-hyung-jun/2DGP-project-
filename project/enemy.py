@@ -10,7 +10,7 @@ from bullet import Bullet
 
 # Hero Run Speed
 PIXEL_PER_METER =  (1.0/0.3)
-RUN_SPEED_KMPH = 2.0
+RUN_SPEED_KMPH = 10.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
@@ -51,7 +51,7 @@ class Enemy:
 
         self.fire_timer -= self.fire_speed
         if self.fire_timer < 0:
-            #self.fire_bullet()
+            self.fire_bullet()
             self.fire_timer = 1000
 
         if self.HP <= 0:
