@@ -15,6 +15,7 @@ class Enemy_genarate:
     def __init__(self):
         self.enemy_num = 20
         self.fuck = 0
+        self.boss_gauge = 0
 
     def update(self):
         if self.enemy_num > 0:

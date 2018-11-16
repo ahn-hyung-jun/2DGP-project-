@@ -13,9 +13,9 @@ from enemy_genarate import Enemy_genarate
 import hero
 
 name = "MainState"
-
 maps = None
-
+global boss_gauge
+boss_gauge = 0
 
 def enter():
     global hero

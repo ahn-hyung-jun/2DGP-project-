@@ -6,6 +6,7 @@ import random
 import game_world
 import hero
 import enemy_genarate
+import main_state
 from bullet import Bullet
 
 # Hero Run Speed
@@ -39,13 +40,16 @@ class Enemy:
     def update(self):
         for hero_bullet in game_world.get_objects(2):
             if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < (10*PIXEL_PER_METER)**2:
+                #라이플은 단순한 데미지
                 if hero_bullet.state == 1:
                     self.HP -= hero_bullet.damage
+                #샷건은 데미지와 넉백
                 if hero_bullet.state == 2:
                     self.HP -= hero_bullet.damage
                     knock_back = math.atan2(hero_bullet.y - self.y, hero_bullet.x - self.x)
-                    self.x -= math.cos(knock_back)
-                    self.y -= math.sin(knock_back)
+                    self.x -= math.cos(knock_back)*PIXEL_PER_METER
+                    self.y -= math.sin(knock_back)*PIXEL_PER_METER
+                #바주카는 스플래시 데미지
                 elif hero_bullet.state == 3:
                     for game_object in game_world.get_objects(1):
                         if ((game_object.x - self.x) ** 2 + (game_object.y - self.y) ** 2) < 100**2:
@@ -61,6 +65,7 @@ class Enemy:
 
         if self.HP <= 0:
             game_world.remove_object(self)
+            main_state.boss_gauge += 1
             enemy_genarate.Enemy_genarate.generate(self)
 
 
