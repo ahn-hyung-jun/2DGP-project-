@@ -39,8 +39,13 @@ class Enemy:
     def update(self):
         for hero_bullet in game_world.get_objects(2):
             if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < (10*PIXEL_PER_METER)**2:
-                if hero_bullet.state == 1 or hero_bullet.state == 2:
+                if hero_bullet.state == 1:
                     self.HP -= hero_bullet.damage
+                if hero_bullet.state == 2:
+                    self.HP -= hero_bullet.damage
+                    knock_back = math.atan2(hero_bullet.y - self.y, hero_bullet.x - self.x)
+                    self.x -= math.cos(knock_back)
+                    self.y -= math.sin(knock_back)
                 elif hero_bullet.state == 3:
                     for game_object in game_world.get_objects(1):
                         if ((game_object.x - self.x) ** 2 + (game_object.y - self.y) ** 2) < 100**2:
