@@ -38,7 +38,7 @@ class Enemy:
 
     def update(self):
         for hero_bullet in game_world.get_objects(2):
-            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < 20**2:
+            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - self.y)**2 ) < (10*PIXEL_PER_METER)**2:
                 if hero_bullet.state == 1 or hero_bullet.state == 2:
                     self.HP -= hero_bullet.damage
                 elif hero_bullet.state == 3:
@@ -51,7 +51,7 @@ class Enemy:
 
         self.fire_timer -= self.fire_speed
         if self.fire_timer < 0:
-            self.fire_bullet()
+            #self.fire_bullet()
             self.fire_timer = 1000
 
         if self.HP <= 0:

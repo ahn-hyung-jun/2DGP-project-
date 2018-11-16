@@ -93,21 +93,21 @@ class RunState:
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
         #탄창을 전부 소징한후 재장전. 타이머를 줄이고 타이머가 0이되면 재장전 완료
         if hero.state == 1 and hero.rifle_reloading == True:
-            hero.rifle_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+            hero.rifle_reload_time -= 1
             if hero.rifle_reload_time < 0:
                 hero.rifle_reloading = False
                 hero.rifle_reload_time = 100
                 hero.rifle_ammo = 30
 
         elif hero.state == 2 and hero.shotgun_reloading == True:
-            hero.shotgun_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+            hero.shotgun_reload_time -= 1
             if hero.shotgun_reload_time < 0:
                 hero.shotgun_reloading = False
                 hero.shotgun_reload_time = 100
                 hero.shotgun_ammo = 8
 
         elif hero.state == 3 and hero.bazuka_reloading == True:
-            hero.bazuka_reload_time -= (FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time)
+            hero.bazuka_reload_time -= 1
             if hero.bazuka_reload_time < 0:
                 hero.bazuka_reloading = False
                 hero.bazuka_reload_time = 100
