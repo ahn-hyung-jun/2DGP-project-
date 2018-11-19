@@ -7,8 +7,8 @@ from bullet import Bullet
 import game_world
 
 # Hero Run Speed
-PIXEL_PER_METER =  (10.0/0.3)
-RUN_SPEED_KMPH = 10.0
+PIXEL_PER_METER =  (10.0/0.3) #10픽셀에 30cm
+RUN_SPEED_KMPH = 10.0 #주인공은 시속 10km
 RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)

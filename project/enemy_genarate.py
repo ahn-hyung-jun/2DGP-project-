@@ -9,7 +9,8 @@ import game_framework
 import enemy
 from enemy import Enemy
 
-
+def get_boss_gauge():
+    return boss_gauge
 
 class Enemy_genarate:
     def __init__(self):
@@ -21,16 +22,26 @@ class Enemy_genarate:
         if self.enemy_num > 0:
             self.enemy_num -= 1
             self.generate()
-
+        global boss_gauge
+        boss_gauge = self.boss_gauge
     def draw(self):
         pass
 
+    def control_boss_gauge(self):
+        self.boss_gauge += 1
+
     def generate(self):
-        enemy = Enemy(random.randint(0, 1280), random.randint(0, 1024))
-        game_world.add_object(enemy, 1)
-
-
-
-
-
+        random_pos = random.randint(0,3)
+        if random_pos == 0:
+            enemy = Enemy(random.randint(0, 1280), random.randint(1024, 1124))
+            game_world.add_object(enemy, 1)
+        elif random_pos == 1:
+            enemy = Enemy(random.randint(1280, 1380), random.randint(0, 1024))
+            game_world.add_object(enemy, 1)
+        elif random_pos == 2:
+            enemy = Enemy(random.randint(0, 1280), random.randint(-100, 100))
+            game_world.add_object(enemy, 1)
+        elif random_pos == 3:
+            enemy = Enemy(random.randint(-100, 0), random.randint(0, 1024))
+            game_world.add_object(enemy, 1)
 
