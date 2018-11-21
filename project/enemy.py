@@ -42,7 +42,7 @@ class Enemy:
 
     def fire_bullet(self):
         bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
-                        1, self.dir_to_hero)
+                        0, self.dir_to_hero)
         game_world.add_object(bullet, 3)
 
     def move_to_hero(self):
