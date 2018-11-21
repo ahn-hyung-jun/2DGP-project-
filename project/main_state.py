@@ -8,6 +8,7 @@ from pico2d import *
 import game_framework
 from map import Map
 from hero import Hero
+from boss import Boss
 from enemy_genarate import Enemy_genarate
 
 import hero
@@ -17,16 +18,28 @@ maps = None
 global boss_gauge
 boss_gauge = 0
 
+def collide(a, b):
+    # fill here
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
 def enter():
     global hero
-
+    global boss
     global enemy_genarate
     hero = Hero()
-
-    enemy_genarate = Enemy_genarate()
+    boss = Boss()
+    #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
-
-    game_world.add_object(enemy_genarate, 0)
+    game_world.add_object(boss, 2)
+    #game_world.add_object(enemy_genarate, 0)
 
 def exit():
     game_world.clear()

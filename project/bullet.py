@@ -33,7 +33,7 @@ class Bullet:
 
     def draw(self):
         if self.state == 0:
-            pass
+            self.image.clip_composite_draw(980 - 20, 980 - 50, 40, 40, self.dir, '', self.x, self.y, 40, 40)
         if self.state == 1 or self.state == 2:
             self.image.clip_composite_draw(980-20, 980-20, 40, 40, self.dir, '', self.x, self.y, 40, 40)
         elif self.state == 3:

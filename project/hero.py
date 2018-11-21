@@ -134,7 +134,9 @@ class RunState:
                 game_world.remove_object(game_object)
 
         #실제 이동
+        #if(hero.x < 1280 and hero.x > 0):
         hero.x += hero.hor_speed*game_framework.frame_time
+        #if(hero.y < 1024 and hero.y > 0):
         hero.y += hero.ver_speed*game_framework.frame_time
 
         #Hero의 x,y값을 넘겨주기 휘함
