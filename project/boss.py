@@ -27,10 +27,10 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-class Boss:
+class Boss_body:
     def __init__(self):
         self.HP = 100
-        self.x , self.y  = 1280//2 , 750
+        self.x , self.y  = 1280//2 , 800
         self.fire_timer = 1000
         self.fire_speed = 10
         self.image = load_image('boss-sprite.png')
@@ -46,12 +46,22 @@ class Boss:
         game_world.add_object(bullet, 3)
 
 
-
-
     def update(self):
-        pass
+        for hero_bullet in game_world.get_objects(2):
+            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
+                    ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y - 200))**2 ) < (PIXEL_PER_METER*4)**2:
+                #라이플은 단순한 데미지
+                if hero_bullet.state == 1:
+                    self.HP -= hero_bullet.damage
+                #샷건은 데미지와 넉백
+                elif hero_bullet.state == 2:
+                    self.HP -= hero_bullet.damage
+                #바주카는 스플래시 데미지
+                elif hero_bullet.state == 3:
+                    self.HP -= hero_bullet.damage
+                    explosion = Explosion(self.x, self.y)
+                    game_world.add_object(explosion, 0)
+                game_world.remove_object(hero_bullet)
 
     def draw(self):
-        #self.image.clip_draw(0, 530-150, 280, 150, self.x, self.y)
-        self.image.clip_composite_draw(0, 540-150, 280, 150, 0, '', self.x, self.y, 280*2.5, 150*2.5)
-        #self.image.clip_composite_draw()
+        self.image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.x, self.y, 280*2.0, 150*2.0)
