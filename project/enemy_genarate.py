@@ -7,10 +7,9 @@ from pico2d import *
 
 import game_framework
 import enemy
+
 from enemy import Enemy
 
-def get_boss_gauge():
-    return boss_gauge
 
 class Enemy_genarate:
     def __init__(self):
@@ -22,13 +21,9 @@ class Enemy_genarate:
         if self.enemy_num > 0:
             self.enemy_num -= 1
             self.generate()
-        global boss_gauge
-        boss_gauge = self.boss_gauge
+
     def draw(self):
         pass
-
-    def control_boss_gauge(self):
-        self.boss_gauge += 1
 
     def generate(self):
         random_pos = random.randint(0,3)
@@ -44,4 +39,3 @@ class Enemy_genarate:
         elif random_pos == 3:
             enemy = Enemy(random.randint(-100, 0), random.randint(0, 1024))
             game_world.add_object(enemy, 1)
-
