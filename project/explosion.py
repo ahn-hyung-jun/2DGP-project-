@@ -6,30 +6,28 @@ import game_framework
 # Bullet Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 
+TIME_PER_ACTION = 1
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
+
 class Explosion:
     image = None
 
     def __init__(self, x = 400, y = 300):
         if Explosion.image == None:
-            self.image = load_image('hero_sprite.png')
+            self.image = load_image('explosion.png')
         self.frame = 1
         self.x = x
         self.y = y
 
     def draw(self):
-        if self. state == 0 or self.state == 1 or self.state == 2:
-            self.image.clip_composite_draw(980-20, 980-20, 40, 40, self.dir, '', self.x, self.y, 40, 40)
-        elif self.state == 3:
-            self.image.clip_composite_draw(900-50, 965-50, 100, 100, self.dir, '', self.x, self.y, 40, 40)
+        self.image.clip_draw(int(self.frame) * 180, 180, 180, 180, self.x, self.y)
 
     def update(self):
-        self.x += self.velocity_x*self.bullet_speed * game_framework.frame_time
-        self.y += self.velocity_y*self.bullet_speed * game_framework.frame_time
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-        if self.x < 0 or self.x > 1280 or self.y < 0 or self.y > 1024:
-            game_world.remove_object(self)
+        game_world.remove_object(self)
 
-        if self.state == 0:
-            pass
+
 
 
