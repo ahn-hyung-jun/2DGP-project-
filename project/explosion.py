@@ -16,17 +16,17 @@ class Explosion:
     def __init__(self, x = 400, y = 300):
         if Explosion.image == None:
             self.image = load_image('explosion.png')
-        self.frame = 1
+        self.frame = 0
         self.x = x
         self.y = y
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 180, 180, 180, 180, self.x, self.y)
+        self.image.clip_composite_draw(0 + int(self.frame)*180, 180, 180, 180, 0, '', self.x, self.y, 100, 100)
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-
-        game_world.remove_object(self)
+        if self.frame > 7:
+            game_world.remove_object(self)
 
 
 
