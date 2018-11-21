@@ -43,3 +43,8 @@ class Bullet:
 
         if self.x < 0 or self.x > 1280 or self.y < 0 or self.y > 1024:
             game_world.remove_object(self)
+
+        if self.state == 0:
+            pass
+
+
