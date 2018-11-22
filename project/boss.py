@@ -24,9 +24,10 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
 # Hero Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 5
 
-
+def get_distance(x1,y1,x2,y2):
+    return (x1-x2)**2 + (y1-y2)**2
 
 class Boss:
     def __init__(self):
@@ -45,7 +46,7 @@ class Boss:
         self.right_arm_x, self.right_arm_y = self.body_x + 60, self.body_y - 80
         #self.right_arm_x, self.right_arm_y = 600,500
         self.right_arm_image = load_image('boss-arm.png')
-        self.right_arm_state = 0
+        self.right_arm_state = 6
 
 
 
@@ -61,8 +62,82 @@ class Boss:
 
     def right_arm_update(self):
         if self.right_arm_state == 0:
+            self.right_arm_x, self.right_arm_y = self.body_x + 60, self.body_y - 80
             for hero_bullet in game_world.get_objects(2):
-                if ((hero_bullet.x - self.right_arm_x) ** 2 + (hero_bullet.y - (self.right_arm_y + 60)) ** 2) < (PIXEL_PER_METER * 2) ** 2:
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y+50) < (PIXEL_PER_METER * 2) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 1 or self.right_arm_state == 2:
+            self.right_arm_x, self.right_arm_y = self.body_x + 120, self.body_y - 80
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 60) < (PIXEL_PER_METER * 2) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 3:
+            self.right_arm_x, self.right_arm_y = self.body_x + 120, self.body_y - 80
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y) < (PIXEL_PER_METER ) ** 2 \
+                    or get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x - 30, self.right_arm_y+30)< (PIXEL_PER_METER) ** 2 \
+                    or get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x + 30, self.right_arm_y-30)< (PIXEL_PER_METER) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 4:
+            self.right_arm_x, self.right_arm_y = self.body_x + 90, self.body_y - 80
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 40) < (PIXEL_PER_METER * 2) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 5:
+            self.right_arm_x, self.right_arm_y = self.body_x + 70, self.body_y - 80
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 40) < (PIXEL_PER_METER * 2) ** 2\
+                        or get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y - 40) < (PIXEL_PER_METER) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 6:
+            self.right_arm_x, self.right_arm_y = self.body_x + 70, self.body_y - 80
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 40) < (PIXEL_PER_METER * 2) ** 2:
                     # 라이플은 단순한 데미지
                     if hero_bullet.state == 1 or hero_bullet.state == 2:
                         self.right_arm_HP -= hero_bullet.damage
@@ -118,6 +193,26 @@ class Boss:
         elif self.right_arm_state == 1:
             self.right_arm_image.clip_composite_draw(70, 535 - 95, 80, 95, 0, '', self.right_arm_x, self.right_arm_y,
                                                      80 * 2.0, 95 * 2.0)
+
+        elif self.right_arm_state == 2:
+            self.right_arm_image.clip_composite_draw(150, 535 - 95, 80, 95, 0, '', self.right_arm_x, self.right_arm_y,
+                                                     80 * 2.0, 95 * 2.0)
+
+        elif self.right_arm_state == 3:
+            self.right_arm_image.clip_composite_draw(230, 535 - 95, 60, 95, 0, '', self.right_arm_x, self.right_arm_y,
+                                                     60 * 2.0, 95 * 2.0)
+
+        elif self.right_arm_state == 4:
+            self.right_arm_image.clip_composite_draw(290, 535 - 95, 40, 95, 0, '', self.right_arm_x, self.right_arm_y,
+                                                     40 * 2.0, 95 * 2.0)
+
+        elif self.right_arm_state == 5:
+            self.right_arm_image.clip_composite_draw(330, 535 - 95, 40, 95, 0, '', self.right_arm_x, self.right_arm_y,
+                                                     40 * 2.0, 95 * 2.0)
+
+        elif self.right_arm_state == 6:
+            self.right_arm_image.clip_composite_draw(370, 535 - 95, 50, 95, 0, '', self.right_arm_x, self.right_arm_y,
+                                                     50 * 2.0, 95 * 2.0)
 
     def draw_left_arm(self):
         if self.left_arm_state == 0:
