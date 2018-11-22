@@ -28,22 +28,29 @@ FRAMES_PER_ACTION = 8
 
 
 class Enemy:
-    def __init__(self , x , y ):
+    def __init__(self , x , y, state ):
         self.HP = 100
         self.x , self.y  = x,y
         self.fire_timer = 1000
         self.fire_speed = 10
+        self.fire_speed_2 = 5
         self.image = load_image('hero_sprite.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir_to_hero = 0
         self.dir_to_move = 0
         self.speed = RUN_SPEED_PPS
         self.timer = 3
+        self.state = state
         self.build_behavior_tree()
 
     def fire_bullet(self):
-        bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
+        if self.state == 4:
+            bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
                         0, self.dir_to_hero)
+        if self.state == 5:
+            bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20),
+                            hero.find_y() + random.randint(-20, 20),
+                            -1, self.dir_to_hero)
         game_world.add_object(bullet, 3)
 
     def move_to_hero(self):
@@ -64,8 +71,10 @@ class Enemy:
         if self.timer < 0:
             self.timer += 1.0
             self.dir_to_move = random.random() * 2 * math.pi
-
-        self.fire_timer -= self.fire_speed
+        if self.state == 4:
+            self.fire_timer -= self.fire_speed
+        elif self.state == 5:
+            self.fire_timer -= self.fire_speed_2
         if self.fire_timer < 0:
             self.fire_bullet()
             self.fire_timer = 1000
@@ -122,5 +131,7 @@ class Enemy:
 
 
     def draw(self):
-        self.image.clip_composite_draw(0, 800, 200, 200, self.dir_to_hero, '', self.x, self.y, 100, 100)
+        #self.image.clip_composite_draw(0, 800, 200, 200, self.dir_to_hero, '', self.x, self.y, 100, 100)
+        self.image.clip_composite_draw(0, 1000 - 200 * self.state, 200, 200, self.dir_to_hero, '', self.x,
+                                       self.y, 100, 100)
         self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 100)' % self.HP, (255, 255, 0))

@@ -15,8 +15,8 @@ import hero
 
 name = "MainState"
 maps = None
-global boss_gauge
-boss_gauge = 0
+
+
 
 def collide(a, b):
     # fill here
@@ -31,15 +31,17 @@ def collide(a, b):
     return True
 
 def enter():
+    global boss_gauge
+    boss_gauge = 40
     global hero
     global boss
     global enemy_genarate
     hero = Hero()
-    boss = Boss()
+
 
     #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
-    game_world.add_object(boss, 1)
+
     #game_world.add_object(enemy_genarate, 0)
 
 def exit():
@@ -69,6 +71,12 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+
+    global boss_gauge
+    if boss_gauge == 40:
+        boss = Boss()
+        game_world.add_object(boss, 1)
+        boss_gauge+=1
 
 def draw():
     clear_canvas()

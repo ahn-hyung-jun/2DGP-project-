@@ -37,13 +37,13 @@ class Boss:
         self.body_state = 0
 
         self.left_arm_HP = 100
-        self.left_arm_x, self.left_arm_y = self.body_x - 90, self.body_y - 60
-        self.left_arm_image = load_image('boss-sprite.png')
+        self.left_arm_x, self.left_arm_y = self.body_x - 60, self.body_y - 40
+        self.left_arm_image = load_image('boss-arm.png')
         self.left_arm_state = 0
 
         self.right_arm_HP = 100
-        self.right_arm_x, self.right_arm_y = self.body_x + 90, self.body_y - 60
-        self.right_arm_image = load_image('boss-sprite.png')
+        self.right_arm_x, self.right_arm_y = self.body_x + 60, self.body_y - 40
+        self.right_arm_image = load_image('boss-arm.png')
         self.right_arm_state = 0
 
 
@@ -59,23 +59,7 @@ class Boss:
         Boss.left_arm_update(self)
 
     def right_arm_update(self):
-        for hero_bullet in game_world.get_objects(2):
-            if ((hero_bullet.x - self.right_arm_x)**2 + (hero_bullet.y - (self.right_arm_y + 50))**2 ) < (PIXEL_PER_METER)**2 or \
-                    ((hero_bullet.x - self.right_arm_x)**2 + (hero_bullet.y - (self.right_arm_y))**2 ) < (PIXEL_PER_METER)**2 or \
-                ((hero_bullet.x - self.right_arm_x) ** 2 + (hero_bullet.y - (self.right_arm_y-50)) ** 2) < (PIXEL_PER_METER ) ** 2:
-                #라이플은 단순한 데미지
-                if hero_bullet.state == 1:
-                    self.right_arm_HP -= hero_bullet.damage
-                #샷건은 데미지와 넉백
-                elif hero_bullet.state == 2:
-                    self.right_arm_HP -= hero_bullet.damage
-                #바주카는 스플래시 데미지
-                elif hero_bullet.state == 3:
-                    self.right_arm_HP -= hero_bullet.damage
-                    explosion = Explosion(hero_bullet.x, hero_bullet.y)
-                    game_world.add_object(explosion, 4)
-                game_world.remove_object(hero_bullet)
-
+        pass
 
     def left_arm_update(self):
         pass
@@ -101,5 +85,7 @@ class Boss:
 
     def draw(self):
         self.body_image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.body_x, self.body_y, 280*2.0, 150*2.0)
-        self.left_arm_image.clip_composite_draw(0, 10, 55, 80, 0, '', self.left_arm_x, self.left_arm_y, 55*2.0, 80*2.0)
-        self.right_arm_image.clip_composite_draw(795, 10, 55, 80, 0, '', self.right_arm_x, self.right_arm_y, 55 * 2.0, 80 * 2.0)
+        #self.left_arm_image.clip_composite_draw(0, 10, 55, 80, 0, '', self.left_arm_x, self.left_arm_y, 55*2.0, 80*2.0)
+        self.left_arm_image.clip_composite_draw(0, 535 - 50, 70, 50, 0, 'h', self.left_arm_x, self.left_arm_y,
+                                                 70 * 2.0, 50 * 2.0)
+        self.right_arm_image.clip_composite_draw(0, 535-50, 70, 50, 0, '', self.right_arm_x, self.right_arm_y, 70 * 2.0, 50 * 2.0)

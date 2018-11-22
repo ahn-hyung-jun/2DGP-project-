@@ -21,18 +21,21 @@ class Bullet:
         self.x, self.y = x + self.velocity_x*30, y + self.velocity_y*30
         self.state = state
         self.dir = dir
-        if state == 0:
+        if state == -1:
+            self.damage = 10
+            self.bullet_speed = GUN_SPEED_PPS*2
+        elif state == 0:
             self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS
-        if state == 1 or state == 2:
-            self.damage = 5
+        elif state == 1 or state == 2:
+            self.damage = 50
             self.bullet_speed = GUN_SPEED_PPS*2
         elif state == 3:
             self.damage = 50
             self.bullet_speed = GUN_SPEED_PPS*2
 
     def draw(self):
-        if self.state == 0:
+        if self.state == 0 or self.state == -1:
             self.image.clip_composite_draw(980 - 20, 980 - 50, 40, 40, self.dir, '', self.x, self.y, 40, 40)
         if self.state == 1 or self.state == 2:
             self.image.clip_composite_draw(980-20, 980-20, 40, 40, self.dir, '', self.x, self.y, 40, 40)
