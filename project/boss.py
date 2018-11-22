@@ -59,7 +59,8 @@ class Boss:
         Boss.left_arm_update(self)
 
     def right_arm_update(self):
-        pass
+        if self.right_arm_state == 0:
+            pass
 
     def left_arm_update(self):
         pass
@@ -85,7 +86,20 @@ class Boss:
 
     def draw(self):
         self.body_image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.body_x, self.body_y, 280*2.0, 150*2.0)
-        #self.left_arm_image.clip_composite_draw(0, 10, 55, 80, 0, '', self.left_arm_x, self.left_arm_y, 55*2.0, 80*2.0)
-        self.left_arm_image.clip_composite_draw(0, 535 - 50, 70, 50, 0, 'h', self.left_arm_x, self.left_arm_y,
+        self.draw_left_arm()
+        self.draw_right_arm()
+
+
+
+    def draw_right_arm(self):
+        if self.right_arm_state == 0:
+            self.right_arm_image.clip_composite_draw(0, 535 - 50, 70, 50, 0, '', self.right_arm_x, self.right_arm_y,
                                                  70 * 2.0, 50 * 2.0)
-        self.right_arm_image.clip_composite_draw(0, 535-50, 70, 50, 0, '', self.right_arm_x, self.right_arm_y, 70 * 2.0, 50 * 2.0)
+
+    def draw_left_arm(self):
+        if self.left_arm_state == 0:
+            self.left_arm_image.clip_composite_draw(0, 535 - 50, 70, 50, 0, 'h', self.left_arm_x, self.left_arm_y,
+                                                70 * 2.0, 50 * 2.0)
+
+
+
