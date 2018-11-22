@@ -95,7 +95,7 @@ class Enemy:
                         if ((game_object.x - self.x) ** 2 + (game_object.y - self.y) ** 2) < 100**2:
                             game_object.HP -= hero_bullet.damage
                             explosion = Explosion(self.x, self.y)
-                            game_world.add_object(explosion, 0)
+                            game_world.add_object(explosion, 4)
                 game_world.remove_object(hero_bullet)
         self.dir_to_hero = math.atan2(hero.find_y() - self.y, hero.find_x() - self.x) - math.pi / 2
 

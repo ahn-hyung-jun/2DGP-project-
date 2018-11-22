@@ -8,7 +8,7 @@ from pico2d import *
 import game_framework
 from map import Map
 from hero import Hero
-from boss import Boss_body
+from boss import Boss
 from enemy_genarate import Enemy_genarate
 
 import hero
@@ -32,13 +32,14 @@ def collide(a, b):
 
 def enter():
     global hero
-    global boss_body
+    global boss
     global enemy_genarate
     hero = Hero()
-    boss_body = Boss_body()
+    boss = Boss()
+
     #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
-    game_world.add_object(boss_body, 1)
+    game_world.add_object(boss, 1)
     #game_world.add_object(enemy_genarate, 0)
 
 def exit():

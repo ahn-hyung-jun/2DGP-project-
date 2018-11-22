@@ -27,41 +27,79 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-class Boss_body:
+
+class Boss:
     def __init__(self):
-        self.HP = 100
-        self.x , self.y  = 1280//2 , 800
-        self.fire_timer = 1000
-        self.fire_speed = 10
-        self.image = load_image('boss-sprite.png')
-        self.font = load_font('ENCR10B.TTF', 16)
-        self.dir_to_hero = 0
-        self.dir_to_move = 0
-        self.speed = RUN_SPEED_PPS
-        self.timer = 3
+        self.body_HP = 100
+        self.body_x , self.body_y  = 1280//2 , 800
+        self.body_image = load_image('boss-sprite.png')
+        self.dir_body_to_hero = 0
+        self.body_state = 0
+
+        self.left_arm_HP = 100
+        self.left_arm_x, self.left_arm_y = self.body_x - 90, self.body_y - 60
+        self.left_arm_image = load_image('boss-sprite.png')
+        self.left_arm_state = 0
+
+        self.right_arm_HP = 100
+        self.right_arm_x, self.right_arm_y = self.body_x + 90, self.body_y - 60
+        self.right_arm_image = load_image('boss-sprite.png')
+        self.right_arm_state = 0
+
+
 
     def fire_bullet(self):
-        bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
-                        0, self.dir_to_hero)
+        bullet = Bullet(self.body_x, self.body_y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
+                        0, self.dir_body_to_hero)
         game_world.add_object(bullet, 3)
 
-
     def update(self):
+        Boss.body_update(self)
+        Boss.right_arm_update(self)
+        Boss.left_arm_update(self)
+
+    def right_arm_update(self):
         for hero_bullet in game_world.get_objects(2):
-            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
-                    ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y - 200))**2 ) < (PIXEL_PER_METER*4)**2:
+            if ((hero_bullet.x - self.right_arm_x)**2 + (hero_bullet.y - (self.right_arm_y + 50))**2 ) < (PIXEL_PER_METER)**2 or \
+                    ((hero_bullet.x - self.right_arm_x)**2 + (hero_bullet.y - (self.right_arm_y))**2 ) < (PIXEL_PER_METER)**2 or \
+                ((hero_bullet.x - self.right_arm_x) ** 2 + (hero_bullet.y - (self.right_arm_y-50)) ** 2) < (PIXEL_PER_METER ) ** 2:
                 #라이플은 단순한 데미지
                 if hero_bullet.state == 1:
-                    self.HP -= hero_bullet.damage
+                    self.right_arm_HP -= hero_bullet.damage
                 #샷건은 데미지와 넉백
                 elif hero_bullet.state == 2:
-                    self.HP -= hero_bullet.damage
+                    self.right_arm_HP -= hero_bullet.damage
                 #바주카는 스플래시 데미지
                 elif hero_bullet.state == 3:
-                    self.HP -= hero_bullet.damage
-                    explosion = Explosion(self.x, self.y)
-                    game_world.add_object(explosion, 0)
+                    self.right_arm_HP -= hero_bullet.damage
+                    explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                    game_world.add_object(explosion, 4)
+                game_world.remove_object(hero_bullet)
+
+
+    def left_arm_update(self):
+        pass
+
+
+    def body_update(self):
+        for hero_bullet in game_world.get_objects(2):
+            if ((hero_bullet.x - self.body_x)**2 + (hero_bullet.y - (self.body_y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
+                    ((hero_bullet.x - self.body_x)**2 + (hero_bullet.y - (self.body_y - 100))**2 ) < (PIXEL_PER_METER*2)**2 or \
+                ((hero_bullet.x - self.body_x) ** 2 + (hero_bullet.y - (self.body_y)) ** 2) < (PIXEL_PER_METER * 2) ** 2:
+                #라이플은 단순한 데미지
+                if hero_bullet.state == 1:
+                    self.body_HP -= hero_bullet.damage
+                #샷건은 데미지와 넉백
+                elif hero_bullet.state == 2:
+                    self.body_HP -= hero_bullet.damage
+                #바주카는 스플래시 데미지
+                elif hero_bullet.state == 3:
+                    self.body_HP -= hero_bullet.damage
+                    explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                    game_world.add_object(explosion, 4)
                 game_world.remove_object(hero_bullet)
 
     def draw(self):
-        self.image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.x, self.y, 280*2.0, 150*2.0)
+        self.body_image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.body_x, self.body_y, 280*2.0, 150*2.0)
+        self.left_arm_image.clip_composite_draw(0, 10, 55, 80, 0, '', self.left_arm_x, self.left_arm_y, 55*2.0, 80*2.0)
+        self.right_arm_image.clip_composite_draw(795, 10, 55, 80, 0, '', self.right_arm_x, self.right_arm_y, 55 * 2.0, 80 * 2.0)

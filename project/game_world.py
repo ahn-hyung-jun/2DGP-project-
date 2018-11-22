@@ -3,8 +3,9 @@
 # layer 1: Foreground Objects(Hero, Enemy, Boss)
 # layer 2: Hero bullet Objects
 # layer 3: Enemy bullet Objects
+# layer 4: Explosion
 
-objects = [[],[],[],[]]
+objects = [[],[],[],[],[]]
 
 def add_object(o, layer):
     objects[layer].append(o)
