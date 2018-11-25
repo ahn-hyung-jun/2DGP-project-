@@ -14,7 +14,6 @@ from enemy import Enemy
 class Enemy_genarate:
     def __init__(self):
         self.enemy_num = 20
-        self.fuck = 0
         self.boss_gauge = 0
         self.boss_exist = False
 

@@ -9,13 +9,14 @@ import game_framework
 from map import Map
 from hero import Hero
 from boss import Boss
+from boss import Boss_right_arm
+from boss import Boss_left_arm
 from enemy_genarate import Enemy_genarate
 
 import hero
 
 name = "MainState"
 maps = None
-
 
 
 def collide(a, b):
@@ -35,9 +36,13 @@ def enter():
     boss_gauge = 40
     global hero
     global boss
+    global boss_right_arm
+    global boss_left_arm
     global enemy_genarate
+
     hero = Hero()
 
+    hide_cursor()
 
     #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
@@ -75,7 +80,11 @@ def update():
     global boss_gauge
     if boss_gauge == 40:
         boss = Boss()
+        boss_right_arm = Boss_right_arm()
+        boss_left_arm = Boss_left_arm()
         game_world.add_object(boss, 1)
+        game_world.add_object(boss_right_arm,1)
+        game_world.add_object(boss_left_arm,1)
         boss_gauge+=1
 
 def draw():
