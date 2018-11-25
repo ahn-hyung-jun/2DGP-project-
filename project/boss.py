@@ -38,12 +38,14 @@ class Boss_right_arm:
         self.right_arm_x, self.right_arm_y = self.body_x + 60, self.body_y - 80
         # self.right_arm_x, self.right_arm_y = 600,500
         self.right_arm_image = load_image('boss-arm.png')
-        self.right_arm_state = 5
+        self.right_arm_state = 2
         self.fire_time = 0
+        self.degree = 0
         self.fire_speed = 1
 
     def update(self):
-        self.fire_time = (self.fire_time + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * self.fire_speed)
+        self.fire_time = self.fire_time + self.fire_speed
+        self.degree += 1
         if self.right_arm_state == 0:
             self.right_arm_x, self.right_arm_y = self.body_x + 60, self.body_y - 80
 
@@ -59,8 +61,25 @@ class Boss_right_arm:
                         game_world.add_object(explosion, 4)
                     game_world.remove_object(hero_bullet)
 
-        if self.right_arm_state == 1 or self.right_arm_state == 2:
+        if self.right_arm_state == 1:
             self.right_arm_x, self.right_arm_y = self.body_x + 120, self.body_y - 80
+            boss_pattern.pattern_3(self.fire_time, self.right_arm_x + 20, self.right_arm_y - 60, 1)
+            for hero_bullet in game_world.get_objects(2):
+                if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 60) < (
+                        PIXEL_PER_METER * 2) ** 2:
+                    # 라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.right_arm_HP -= hero_bullet.damage
+                    # 바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.right_arm_HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
+
+        if self.right_arm_state == 2:
+            self.right_arm_x, self.right_arm_y = self.body_x + 120, self.body_y - 80
+            boss_pattern.pattern_3(self.fire_time, self.right_arm_x + 45, self.right_arm_y + 5, 1)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 60) < (PIXEL_PER_METER * 2) ** 2:
                     # 라이플은 단순한 데미지
@@ -75,6 +94,7 @@ class Boss_right_arm:
 
         if self.right_arm_state == 3:
             self.right_arm_x, self.right_arm_y = self.body_x + 120, self.body_y - 80
+            boss_pattern.pattern_3(self.fire_time, self.right_arm_x + 20, self.right_arm_y - 60, 1)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y) < (PIXEL_PER_METER ) ** 2 \
                     or get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x - 30, self.right_arm_y+30)< (PIXEL_PER_METER) ** 2 \
@@ -91,6 +111,7 @@ class Boss_right_arm:
 
         if self.right_arm_state == 4:
             self.right_arm_x, self.right_arm_y = self.body_x + 90, self.body_y - 80
+            boss_pattern.pattern_4(self.fire_time, self.right_arm_x + 0, self.right_arm_y - 10, 1, self.degree)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.right_arm_x, self.right_arm_y + 40) < (PIXEL_PER_METER * 2) ** 2:
                     # 라이플은 단순한 데미지

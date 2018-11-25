@@ -16,6 +16,34 @@ TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
+
+def pattern_3(fire, x, y, state):
+    dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
+    if int(fire)%8 == 0:
+        bullet1 = Boss_bullet(x, y, dir - math.pi / 10 , state)
+        game_world.add_object(bullet1, 3)
+
+    elif int(fire)%8 == 1:
+        bullet2 = Boss_bullet(x, y, dir + math.pi / 10, state)
+        game_world.add_object(bullet2, 3)
+
+
+def pattern_4(fire, x, y, state, degree):
+    #dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
+    if int(fire)%8 == 0:
+        bullet1 = Boss_bullet(x, y, math.radians(degree), state)
+        game_world.add_object(bullet1, 3)
+    elif int(fire)%8 == 1:
+        bullet2 = Boss_bullet(x, y, math.radians(degree) - math.pi / 2, state)
+        game_world.add_object(bullet2, 3)
+    elif int(fire)%8 == 2:
+        bullet3 = Boss_bullet(x, y, math.radians(degree) - math.pi, state)
+        game_world.add_object(bullet3, 3)
+    elif int(fire)%8 == 3:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi / 2, state)
+        game_world.add_object(bullet4, 3)
+
+
 def pattern_5(fire, x, y, state):
     #dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
     if int(fire)%2 == 0:
