@@ -34,7 +34,7 @@ class Boss_right_arm:
     def __init__(self):
         self.body_x, self.body_y = 1280 // 2, 800
 
-        self.HP = 10000
+        self.HP = 1000
         self.x, self.y = self.body_x + 60, self.body_y - 80
         # self.right_arm_x, self.right_arm_y = 600,500
         self.right_arm_image = load_image('boss-arm.png')
@@ -192,7 +192,7 @@ class Boss_left_arm:
     def __init__(self):
         self.body_x, self.body_y = 1280 // 2, 800
 
-        self.HP = 10000
+        self.HP = 1000
         self.x, self.y = self.body_x - 60, self.body_y - 80
         self.left_arm_image = load_image('boss-arm.png')
         self.state = 0

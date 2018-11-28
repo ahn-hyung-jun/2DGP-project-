@@ -78,7 +78,7 @@ def update():
         game_object.update()
 
     global boss_gauge
-    if boss_gauge == 40:
+    if boss_gauge == 60:
         boss = Boss()
         boss_right_arm = Boss_right_arm()
         boss_left_arm = Boss_left_arm()

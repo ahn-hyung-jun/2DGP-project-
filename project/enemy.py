@@ -115,7 +115,7 @@ class Enemy:
         if self.HP <= 0:
             game_world.remove_object(self)
             main_state.boss_gauge += 1
-            if main_state.boss_gauge < 30:
+            if main_state.boss_gauge < 50:
                 enemy_genarate.Enemy_genarate.generate(self)
                 main_state.boss_gauge += 1
 
