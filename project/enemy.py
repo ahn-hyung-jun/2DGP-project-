@@ -29,7 +29,7 @@ FRAMES_PER_ACTION = 8
 
 class Enemy:
     def __init__(self , x , y, state ):
-        self.HP = 100
+        self.HP = 20
         self.x , self.y  = x,y
         self.fire_timer = 1000
         self.fire_speed = 10

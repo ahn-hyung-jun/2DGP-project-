@@ -28,7 +28,7 @@ class Bullet:
             self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS
         elif state == 1 or state == 2:
-            self.damage = 50
+            self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS*2
         elif state == 3:
             self.damage = 50

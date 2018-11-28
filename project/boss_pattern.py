@@ -26,7 +26,7 @@ def pattern_1(fire, x, y, state):
 
 def pattern_2(fire, x, y, state):
     dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
-    if int(fire)%30 == 0:
+    if int(fire)%50 == 0:
         bullet = Boss_bullet(x, y, dir, state+2)
         game_world.add_object(bullet, 3)
 

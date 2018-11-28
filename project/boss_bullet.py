@@ -48,12 +48,12 @@ class Boss_bullet:
             game_world.remove_object(self)
 
         if self.state == 3:
-            if self.fire_time % 20 == 0:
+            if self.fire_time % 40 == 0:
                 bullet = Boss_bullet(self.x, self.y, math.atan2(hero.find_y() - self.y, hero.find_x() - self.x), 1)
                 game_world.add_object(bullet, 3)
 
         if self.state == 2:
-            if self.fire_time % 20 == 0:
+            if self.fire_time % 40 == 0:
                 bullet = Boss_bullet(self.x, self.y, math.atan2(hero.find_y() - self.y, hero.find_x() - self.x), 0)
                 game_world.add_object(bullet, 3)
 
