@@ -32,10 +32,12 @@ class Boss_bullet:
 
 
     def draw(self):
-        if(self.state == 1 or self.state == 3):
+        if(self.state == 1 or self.state == 4):
             self.image.clip_composite_draw(980, 920, 20, 20, 0, '', self.x, self.y, 40, 40)
-        elif self.state == 0 or self.state == 2:
+        elif self.state == 0 or self.state == 3:
             self.image.clip_composite_draw(980, 900, 20, 20, 0, '', self.x, self.y, 40, 40)
+        elif self.state == 2:
+            self.image.clip_composite_draw(980, 940, 20, 20, 0, '', self.x, self.y, 40, 40)
 
 
     def update(self):
@@ -47,12 +49,12 @@ class Boss_bullet:
         if self.x < 0 or self.x > 1280 or self.y < 0 or self.y > 1024:
             game_world.remove_object(self)
 
-        if self.state == 3:
+        if self.state == 4:
             if self.fire_time % 40 == 0:
                 bullet = Boss_bullet(self.x, self.y, math.atan2(hero.find_y() - self.y, hero.find_x() - self.x), 1)
                 game_world.add_object(bullet, 3)
 
-        if self.state == 2:
+        if self.state == 3:
             if self.fire_time % 40 == 0:
                 bullet = Boss_bullet(self.x, self.y, math.atan2(hero.find_y() - self.y, hero.find_x() - self.x), 0)
                 game_world.add_object(bullet, 3)

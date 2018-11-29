@@ -44,10 +44,10 @@ def enter():
 
     hide_cursor()
 
-    enemy_genarate = Enemy_genarate()
+    #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
 
-    game_world.add_object(enemy_genarate, 0)
+    #game_world.add_object(enemy_genarate, 0)
 
 def exit():
     game_world.clear()
