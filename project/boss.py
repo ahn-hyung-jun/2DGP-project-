@@ -30,6 +30,8 @@ FRAMES_PER_ACTION = 7
 def get_distance(x1,y1,x2,y2):
     return (x1-x2)**2 + (y1-y2)**2
 
+
+
 class Boss_right_arm:
     def __init__(self):
         self.body_x, self.body_y = 1280 // 2, 800
@@ -43,7 +45,10 @@ class Boss_right_arm:
         self.degree = 0
         self.fire_speed = 1
 
+
     def update(self):
+        global right_arm_state
+        right_arm_state = self.state
         self.fire_time = self.fire_time + self.fire_speed
         if self.fire_time%300 == 0 and self.HP > 0:
             self.state = random.randint(1,6)
@@ -53,18 +58,8 @@ class Boss_right_arm:
         self.degree += 1
         if self.state == 0:
             self.x, self.y = self.body_x + 60, self.body_y - 80
+            boss_pattern.pattern_0(self.fire_time,self.x, self.y, 1)
 
-            for hero_bullet in game_world.get_objects(2):
-                if get_distance(hero_bullet.x, hero_bullet.y, self.x, self.y+50) < (PIXEL_PER_METER * 2) ** 2:
-                    # 라이플은 단순한 데미지
-                    if hero_bullet.state == 1 or hero_bullet.state == 2:
-                        self.HP -= hero_bullet.damage
-                    # 바주카는 스플래시 데미지
-                    elif hero_bullet.state == 3:
-                        self.HP -= hero_bullet.damage
-                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
-                        game_world.add_object(explosion, 4)
-                    game_world.remove_object(hero_bullet)
 
         if self.state == 1:
             self.x, self.y = self.body_x + 120, self.body_y - 80
@@ -201,9 +196,11 @@ class Boss_left_arm:
         self.degree = 0
         self.fire_speed = 1
 
-        self.degree +=1
+        self.degree =1
 
     def update(self):
+        global left_arm_state
+        left_arm_state = self.state
         self.fire_time = self.fire_time + self.fire_speed
         if self.fire_time % 300 == 0 and self.HP > 0:
             self.state = random.randint(1, 6)
@@ -212,21 +209,11 @@ class Boss_left_arm:
         self.degree += 1
         if self.state == 0:
             self.x, self.y = self.body_x - 60, self.body_y - 80
-            for hero_bullet in game_world.get_objects(2):
-                if get_distance(hero_bullet.x, hero_bullet.y, self.x, self.y+50) < (PIXEL_PER_METER * 2) ** 2:
-                    # 라이플은 단순한 데미지
-                    if hero_bullet.state == 1 or hero_bullet.state == 2:
-                        self.HP -= hero_bullet.damage
-                    # 바주카는 스플래시 데미지
-                    elif hero_bullet.state == 3:
-                        self.HP -= hero_bullet.damage
-                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
-                        game_world.add_object(explosion, 4)
-                    game_world.remove_object(hero_bullet)
+            boss_pattern.pattern_0(self.fire_time, self.x, self.y, 1)
 
         if self.state == 1:
             self.x, self.y = self.body_x - 120, self.body_y - 80
-            boss_pattern.pattern_1(self.fire_time, self.x + 40, self.y - 10, 0)
+            boss_pattern.pattern_1(self.fire_time, self.x - 40, self.y - 10, 0)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.x, self.y + 60) < (
                         PIXEL_PER_METER * 2) ** 2:
@@ -242,7 +229,7 @@ class Boss_left_arm:
 
         if self.state == 2:
             self.x, self.y = self.body_x - 120, self.body_y - 80
-            boss_pattern.pattern_2(self.fire_time, self.x + 45, self.y + 5, 0)
+            boss_pattern.pattern_2(self.fire_time, self.x - 45, self.y + 5, 0)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.x, self.y + 60) < (PIXEL_PER_METER * 2) ** 2:
                     # 라이플은 단순한 데미지
@@ -257,7 +244,7 @@ class Boss_left_arm:
 
         if self.state == 3:
             self.x, self.y = self.body_x - 120, self.body_y - 80
-            boss_pattern.pattern_3(self.fire_time, self.x + 20, self.y - 60, 0)
+            boss_pattern.pattern_3(self.fire_time, self.x - 20, self.y - 60, 0)
             for hero_bullet in game_world.get_objects(2):
                 if get_distance(hero_bullet.x, hero_bullet.y, self.x, self.y) < (PIXEL_PER_METER ) ** 2 \
                     or get_distance(hero_bullet.x, hero_bullet.y, self.x - 30, self.y+30)< (PIXEL_PER_METER) ** 2 \
@@ -353,36 +340,56 @@ class Boss:
         self.x , self.y  = 1280//2 , 800
         self.body_image = load_image('boss-sprite.png')
         self.dir_body_to_hero = 0
-        self.body_state = 0
+        self.body_state = 1
 
         self.frame = 0
 
+        self.state = 0
 
+        self.fire_time = 0
+        self.degree = 0
+        self.fire_speed = 1
 
+        self.degree += 1
 
-    def fire_bullet(self):
-        bullet = Bullet(self.x, self.y, hero.find_x() + random.randint(-20, 20), hero.find_y() + random.randint(-20, 20),
-                        0, self.dir_body_to_hero)
-        game_world.add_object(bullet, 3)
 
     def update(self):
+        self.fire_time = self.fire_time + self.fire_speed
+        if self.fire_time % 300 == 0 and self.HP > 0 and self.state != 0:
+            self.state = random.randint(1, 3)
+        elif self.HP < 0:
+            self.state = -1
+        self.degree += 1
         Boss.body_update(self)
+
+        if main_state.get_left_arm_state() == 0 and main_state.get_right_arm_state() == 0 and self.state == 0:
+            self.state = random.randint(1,3)
+
+
 
 
     def body_update(self):
-        for hero_bullet in game_world.get_objects(2):
-            if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
-                    ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y - 100))**2 ) < (PIXEL_PER_METER*2)**2 or \
-                ((hero_bullet.x - self.x) ** 2 + (hero_bullet.y - (self.y)) ** 2) < (PIXEL_PER_METER * 2) ** 2:
-                #라이플은 단순한 데미지
-                if hero_bullet.state == 1 or hero_bullet.state == 2:
-                    self.HP -= hero_bullet.damage
-                #바주카는 스플래시 데미지
-                elif hero_bullet.state == 3:
-                    self.HP -= hero_bullet.damage
-                    explosion = Explosion(hero_bullet.x, hero_bullet.y)
-                    game_world.add_object(explosion, 4)
-                game_world.remove_object(hero_bullet)
+        if self.state == 1:
+            boss_pattern.pattern_head_1(self.fire_time, self.x, self.y, 2)
+
+        if self.state != 0:
+            boss_pattern.pattern_0(self.fire_time, self.x + 250, self.y + 50, 2)
+            boss_pattern.pattern_0(self.fire_time, self.x + 250, self.y - 50, 2)
+            boss_pattern.pattern_0(self.fire_time, self.x - 250, self.y + 50, 2)
+            boss_pattern.pattern_0(self.fire_time, self.x - 250, self.y - 50, 2)
+            for hero_bullet in game_world.get_objects(2):
+                if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
+                        ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y - 100))**2 ) < (PIXEL_PER_METER*2)**2 or \
+                    ((hero_bullet.x - self.x) ** 2 + (hero_bullet.y - (self.y)) ** 2) < (PIXEL_PER_METER * 2) ** 2:
+                    #라이플은 단순한 데미지
+                    if hero_bullet.state == 1 or hero_bullet.state == 2:
+                        self.HP -= hero_bullet.damage
+                    #바주카는 스플래시 데미지
+                    elif hero_bullet.state == 3:
+                        self.HP -= hero_bullet.damage
+                        explosion = Explosion(hero_bullet.x, hero_bullet.y)
+                        game_world.add_object(explosion, 4)
+                    game_world.remove_object(hero_bullet)
 
     def draw(self):
         self.body_image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.x, self.y, 280*2.0, 150*2.0)

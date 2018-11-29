@@ -33,13 +33,16 @@ def collide(a, b):
 
 def enter():
     global boss_gauge
-    boss_gauge = 0
+    boss_gauge = 60
     global hero
     global boss
     global boss_right_arm
     global boss_left_arm
     global enemy_genarate
 
+    boss = Boss()
+    boss_right_arm = Boss_right_arm()
+    boss_left_arm = Boss_left_arm()
     hero = Hero()
 
     hide_cursor()
@@ -52,7 +55,11 @@ def enter():
 def exit():
     game_world.clear()
 
+def get_right_arm_state():
+    return boss_right_arm.state
 
+def get_left_arm_state():
+    return boss_left_arm.state
 
 def pause():
     pass
@@ -79,9 +86,6 @@ def update():
 
     global boss_gauge
     if boss_gauge == 60:
-        boss = Boss()
-        boss_right_arm = Boss_right_arm()
-        boss_left_arm = Boss_left_arm()
         game_world.add_object(boss, 1)
         game_world.add_object(boss_right_arm,1)
         game_world.add_object(boss_left_arm,1)

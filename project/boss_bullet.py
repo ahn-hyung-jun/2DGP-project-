@@ -24,6 +24,8 @@ class Boss_bullet:
         self.x, self.y = x, y
         self.state = state
         self.bullet_speed = GUN_SPEED_PPS
+        if self.state == 5:
+            self.bullet_speed = GUN_SPEED_PPS // 2
         self.damage = 5
         self.dir = dir
         self.fire_time = 0
@@ -36,12 +38,13 @@ class Boss_bullet:
             self.image.clip_composite_draw(980, 920, 20, 20, 0, '', self.x, self.y, 40, 40)
         elif self.state == 0 or self.state == 3:
             self.image.clip_composite_draw(980, 900, 20, 20, 0, '', self.x, self.y, 40, 40)
-        elif self.state == 2:
-            self.image.clip_composite_draw(980, 940, 20, 20, 0, '', self.x, self.y, 40, 40)
+        elif self.state == 2 or self.state == 5:
+            self.image.clip_composite_draw(980, 880, 20, 20, 0, '', self.x, self.y, 40, 40)
 
 
     def update(self):
         self.fire_time += self.fire_speed
+        self.degree += 1
         self.x += math.cos(self.dir) *self.bullet_speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.bullet_speed * game_framework.frame_time
 
@@ -59,6 +62,19 @@ class Boss_bullet:
                 bullet = Boss_bullet(self.x, self.y, math.atan2(hero.find_y() - self.y, hero.find_x() - self.x), 0)
                 game_world.add_object(bullet, 3)
 
+        if self.state == 5:
+            if int(self.fire_time) % 8 == 0:
+                bullet1 = Boss_bullet(self.x, self.y, math.radians(self.degree), 2)
+                game_world.add_object(bullet1, 3)
+            elif int(self.fire_time) % 8 == 1:
+                bullet2 = Boss_bullet(self.x, self.y, math.radians(self.degree) - math.pi / 2, 2)
+                game_world.add_object(bullet2, 3)
+            elif int(self.fire_time) % 8 == 2:
+                bullet3 = Boss_bullet(self.x, self.y, math.radians(self.degree) - math.pi, 2)
+                game_world.add_object(bullet3, 3)
+            elif int(self.fire_time) % 8 == 3:
+                bullet4 = Boss_bullet(self.x, self.y, math.radians(self.degree) + math.pi / 2, 2)
+                game_world.add_object(bullet4, 3)
 
 
 

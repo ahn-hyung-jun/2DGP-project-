@@ -17,6 +17,12 @@ TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
+def pattern_0(fire, x, y, state):
+    dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
+    if int(fire)%50 == 0:
+        bullet = Boss_bullet(x, y, dir, state)
+        game_world.add_object(bullet, 3)
+
 def pattern_1(fire, x, y, state):
     dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
     if int(fire)%30 == 0:
@@ -71,7 +77,7 @@ def pattern_6(fire, x, y, state):
 
 def pattern_head_1(fire, x, y, state):
     dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
-    if int(fire)%50 == 0:
+    if int(fire)%100 == 0:
         bullet = Boss_bullet(x, y, dir, state+3)
         game_world.add_object(bullet, 3)
 
