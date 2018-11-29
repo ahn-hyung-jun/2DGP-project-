@@ -75,9 +75,41 @@ def pattern_6(fire, x, y, state):
         bullet = Boss_bullet(x, y, dir, state)
         game_world.add_object(bullet, 3)
 
+def pattern_tentacle(fire,x,y,state):
+    dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
+    if int(fire)%15 == 0:
+        bullet = Boss_bullet(x, y, dir, state)
+        game_world.add_object(bullet, 3)
+
 def pattern_head_1(fire, x, y, state):
     dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
     if int(fire)%100 == 0:
         bullet = Boss_bullet(x, y, dir, state+3)
         game_world.add_object(bullet, 3)
+
+def pattern_head_2(fire, x, y, state, degree):
+    if int(fire)%8 == 0:
+        bullet1 = Boss_bullet(x, y, math.radians(degree), state)
+        game_world.add_object(bullet1, 3)
+    elif int(fire)%8 == 1:
+        bullet2 = Boss_bullet(x, y, math.radians(degree) - math.pi / 4, state)
+        game_world.add_object(bullet2, 3)
+    elif int(fire)%8 == 2:
+        bullet3 = Boss_bullet(x, y, math.radians(degree) - math.pi / 4 * 2, state)
+        game_world.add_object(bullet3, 3)
+    elif int(fire)%8 == 3:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi / 4 * 3, state)
+        game_world.add_object(bullet4, 3)
+    elif int(fire)%8 == 4:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi / 4, state)
+        game_world.add_object(bullet4, 3)
+    elif int(fire)%8 == 5:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi / 4*2, state)
+        game_world.add_object(bullet4, 3)
+    elif int(fire)%8 == 6:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi / 4*3, state)
+        game_world.add_object(bullet4, 3)
+    elif int(fire)%8 == 7:
+        bullet4 = Boss_bullet(x, y, math.radians(degree) + math.pi, state)
+        game_world.add_object(bullet4, 3)
 
