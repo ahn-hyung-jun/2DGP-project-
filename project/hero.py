@@ -114,11 +114,12 @@ class RunState:
                 hero.bazuka_ammo = 3
 
         #지금 들고있는 총에따라 발사시간이 줄어든다.
-        if hero.auto_fire == True and hero.rifle_reloading == False and hero.state == 1:
+        if hero.auto_fire == True:
+            if hero.rifle_reloading == False and hero.state == 1:
                 hero.fire_timer -= hero.rifle_fire_speed
-        elif hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
+            if hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
                 hero.fire_timer -= hero.shotgun_fire_speed
-        elif hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
+            if hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
                 hero.fire_timer -= hero.bazuka_fire_speed
 
         #발사시간이 0이되면 발포. Hero의 발사클래스를 부르고 프레임을 바꿔 발포하는 애니매이션을 띄움
@@ -129,10 +130,15 @@ class RunState:
 
         #적군총알과의 충돌체크
         for game_object in game_world.get_objects(3):
-            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2:
+            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2 and hero.imotal == False:
                 hero.HP -= game_object.damage
+                hero.imotal = True
                 game_world.remove_object(game_object)
 
+        if hero.imotal == True:
+            hero.imotal_time -= 1
+            if hero.imotal_time <0:
+                hero.imotal = False
         #실제 이동
         #if(hero.x < 1280 and hero.x > 0):
         hero.x += hero.hor_speed*game_framework.frame_time
@@ -173,6 +179,12 @@ class Hero:
         self.cur_state = RunState
         self.cur_state.enter(self, None)
         self.font = load_font('ENCR10B.TTF', 16)
+
+        self.imotal = False
+        self.imotal_time = 20
+
+        self.rifle_sound = load_wav('Rifle_sound.wav')
+        self.rifle_sound.set_volume(32)
 
         self.auto_fire = False
         self.fire_timer = 1000
@@ -220,6 +232,8 @@ class Hero:
             self.bazuka_ammo -= 1
             if self.bazuka_ammo == 0:
                 self.bazuka_reloading = True
+
+
 
 
 

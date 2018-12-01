@@ -21,18 +21,29 @@ class Bullet:
         self.x, self.y = x + self.velocity_x*30, y + self.velocity_y*30
         self.state = state
         self.dir = dir
+        self.rifle_sound = load_wav('Rifle_sound.wav')
+        self.rifle_sound.set_volume(12)
+        self.bazuka_sound = load_wav('Bazuka_sound.wav')
+        self.bazuka_sound.set_volume(50)
         if state == -1:
             self.damage = 10
             self.bullet_speed = GUN_SPEED_PPS*2
+            self.rifle_sound.play()
         elif state == 0:
             self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS
+            self.rifle_sound.play()
         elif state == 1 or state == 2:
             self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS*2
+            self.rifle_sound.play()
         elif state == 3:
             self.damage = 50
             self.bullet_speed = GUN_SPEED_PPS*2
+            self.bazuka_sound.play()
+
+
+
 
     def draw(self):
         if self.state == 0 or self.state == -1:

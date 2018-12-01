@@ -16,6 +16,9 @@ class Explosion:
     def __init__(self, x = 400, y = 300):
         if Explosion.image == None:
             self.image = load_image('explosion.png')
+        self.sound = load_wav('Explosion.wav')
+        self.sound.set_volume(32)
+        self.sound.play()
         self.frame = 0
         self.x = x
         self.y = y

@@ -8,10 +8,16 @@ import game_framework
 
 class Map:
     def __init__(self, i = 0, j = 0):
-        self.x_pos, self.y_pos = 10 + 10*i, 10+10*j
-        self.state = 0
-        self.size = 10
+        self.image = load_image('back_ground.png')
+        self.x_pos, self.y_pos = 1280/2, 1024/2
+        self.bgm = load_music('Bgm.mp3')
+        self.bgm.set_volume(40)
+        self.bgm.repeat_play()
+
+
+    def update(self):
+        pass
 
 
     def draw(self):
-        pass
+        self.image.draw(self.x_pos, self.y_pos)
