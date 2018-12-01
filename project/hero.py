@@ -19,6 +19,7 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
+
 # Hero Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, UP_UP, UP_DOWN, DOWN_UP, DOWN_DOWN, DOWN_1, DOWN_2, DOWN_3, M_LEFT_DOWN, M_LEFT_UP = range(13)
 
@@ -169,6 +170,7 @@ class Hero:
         self.x, self.y = 1280 / 2, 1024/2
         self.HP = 100
         self.image = load_image('hero_sprite.png')
+        self.HP_image = load_image('HP.png')
         self.state = 1
         self.hor_speed = 0
         self.ver_speed = 0
@@ -254,20 +256,22 @@ class Hero:
         self.font.draw(0, 30, '(R %3.2i / 100)' % self.HP, (255, 255, 0))
         if self.state == 1:
             if self.rifle_reloading == False:
-                self.font.draw(self.x - 60, self.y + 50, '(R %3.2i / 30)' % self.rifle_ammo, (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(R %3.2i / 30)' % self.rifle_ammo, (0, 0, 0))
             elif self.rifle_reloading == True:
-                self.font.draw(self.x - 60, self.y + 50, '(R Reloading!)', (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(R Reloading!)', (0, 0, 0))
         elif self.state == 2:
             if self.shotgun_reloading == False:
-                self.font.draw(self.x - 60, self.y + 50, '(S %3.2i / 8)' % self.shotgun_ammo, (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(S %3.2i / 8)' % self.shotgun_ammo, (0, 0, 0))
             elif self.shotgun_reloading == True:
-                self.font.draw(self.x - 60, self.y + 50, '(S Reloading!)', (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(S Reloading!)', (0, 0, 0))
         elif self.state == 3:
             if self.bazuka_reloading == False:
-                self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 3)' % self.bazuka_ammo, (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 3)' % self.bazuka_ammo, (0, 0, 0))
             elif self.bazuka_reloading == True:
-                self.font.draw(self.x - 60, self.y + 50, '(B Reloading!)', (255, 255, 0))
+                self.font.draw(self.x - 60, self.y + 50, '(B Reloading!)', (0, 0, 0))
 
+        self.HP_image.clip_composite_draw(0,0,100,100,0,'',self.x ,self.y - 50,self.HP * 1.5,20)
+        self.font.draw(self.x - 60, self.y - 50, '(R %3.2i / 100)' % self.HP, (255, 255, 255))
 
 
 
