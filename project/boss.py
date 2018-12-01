@@ -11,6 +11,7 @@ from bullet import Bullet
 from explosion import Explosion
 import game_framework
 import boss_pattern
+import victory_state
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 # Enemy Run Speed
@@ -36,7 +37,7 @@ class Boss_right_arm:
     def __init__(self):
         self.body_x, self.body_y = 1280 // 2, 800
 
-        self.HP = 1000
+        self.HP = 2000
         self.x, self.y = self.body_x + 60, self.body_y - 80
         # self.right_arm_x, self.right_arm_y = 600,500
         self.right_arm_image = load_image('boss-arm.png')
@@ -193,7 +194,7 @@ class Boss_left_arm:
     def __init__(self):
         self.body_x, self.body_y = 1280 // 2, 800
 
-        self.HP = 1000
+        self.HP = 2000
         self.x, self.y = self.body_x - 60, self.body_y - 80
         self.left_arm_image = load_image('boss-arm.png')
         self.state = -1
@@ -375,7 +376,7 @@ class Boss:
             self.state = random.randint(1, 3)
             pass
         elif self.HP < 0:
-            self.state = -1
+            game_framework.change_state(victory_state)
         #self.degree = self.degree + 1* game_framework.frame_time*FRAMES_PER_ACTION
         Boss.body_update(self)
 

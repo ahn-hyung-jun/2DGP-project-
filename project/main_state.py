@@ -2,6 +2,8 @@ import random
 import json
 import os
 import game_world
+import fail_state
+import victory_state
 
 from pico2d import *
 
@@ -13,8 +15,6 @@ from boss import Boss_right_arm
 from boss import Boss_left_arm
 from cursor import Cursor
 from enemy_genarate import Enemy_genarate
-
-import hero
 
 name = "MainState"
 maps = None
@@ -34,7 +34,7 @@ def collide(a, b):
 
 def enter():
     global boss_gauge
-    boss_gauge = 0
+    boss_gauge = 60
     global hero
     global cursor
     global boss
@@ -52,11 +52,11 @@ def enter():
     hide_cursor()
     game_world.add_object(map,0)
 
-    enemy_genarate = Enemy_genarate()
+    #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
     game_world.add_object(cursor, 4)
 
-    game_world.add_object(enemy_genarate, 0)
+    #game_world.add_object(enemy_genarate, 0)
 
 def exit():
     game_world.clear()
@@ -97,6 +97,12 @@ def update():
         game_world.add_object(boss_right_arm,1)
         game_world.add_object(boss_left_arm,1)
         boss_gauge+=1
+
+    if hero.HP == 0:
+        game_framework.change_state(fail_state)
+
+    if boss.HP == 0:
+        game_framework.change_state(victory_state)
 
 def draw():
     clear_canvas()

@@ -2,6 +2,7 @@ from pico2d import *
 import math
 import random
 import game_framework
+import fail_state
 
 from bullet import Bullet
 import game_world
@@ -136,8 +137,7 @@ class RunState:
                     hero.HP -= game_object.damage
                     hero.immotal = True
                 game_world.remove_object(game_object)
-                if hero.HP == 0:
-                    game_framework.quit()
+
 
         if hero.immotal == True:
             hero.immotal_time -= 1* game_framework.frame_time*FRAMES_PER_ACTION
