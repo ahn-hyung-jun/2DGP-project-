@@ -131,15 +131,18 @@ class RunState:
 
         #적군총알과의 충돌체크
         for game_object in game_world.get_objects(3):
-            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2 and hero.imotal == False:
+            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2 and hero.immotal == False:
                 hero.HP -= game_object.damage
-                hero.imotal = True
+                hero.immotal = True
                 game_world.remove_object(game_object)
+                if hero.HP == 0:
+                    game_framework.quit()
 
-        if hero.imotal == True:
-            hero.imotal_time -= 1
-            if hero.imotal_time <0:
-                hero.imotal = False
+        if hero.immotal == True:
+            hero.immotal_time -= 1
+            if hero.immotal_time <0:
+                hero.immotal = False
+                hero.immotal_time = 100
         #실제 이동
         #if(hero.x < 1280 and hero.x > 0):
         hero.x += hero.hor_speed*game_framework.frame_time
@@ -180,9 +183,12 @@ class Hero:
         self.cur_state = RunState
         self.cur_state.enter(self, None)
         self.font = load_font('ENCR10B.TTF', 16)
+        global mouse_x, mouse_y
+        mouse_x = 0
+        mouse_y = 0
 
-        self.imotal = False
-        self.imotal_time = 20
+        self.immotal = False
+        self.immotal_time = 100
 
         self.rifle_sound = load_wav('Rifle_sound.wav')
         self.rifle_sound.set_volume(32)

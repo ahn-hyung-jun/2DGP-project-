@@ -18,6 +18,9 @@ class Cursor:
         self.image = load_image('mouse.png')
         self.x = 0
         self.y = 0
+        global mouse_x, mouse_y
+        mouse_x = 0
+        mouse_y = 0
 
     def draw(self):
         self.image.clip_draw(0, 0, 100, 100, self.x, self.y)
