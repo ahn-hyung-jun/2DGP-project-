@@ -16,7 +16,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
 # Hero Action Speed
 TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 60
 
 
 
@@ -94,21 +94,21 @@ class RunState:
         hero.dir = math.atan2(mouse_y - hero.y, mouse_x - hero.x) - math.pi/2
         #탄창을 전부 소징한후 재장전. 타이머를 줄이고 타이머가 0이되면 재장전 완료
         if hero.state == 1 and hero.rifle_reloading == True:
-            hero.rifle_reload_time -= 1
+            hero.rifle_reload_time -= 1 * game_framework.frame_time*FRAMES_PER_ACTION
             if hero.rifle_reload_time < 0:
                 hero.rifle_reloading = False
                 hero.rifle_reload_time = 100
                 hero.rifle_ammo = 30
 
         elif hero.state == 2 and hero.shotgun_reloading == True:
-            hero.shotgun_reload_time -= 1
+            hero.shotgun_reload_time -= 1* game_framework.frame_time*FRAMES_PER_ACTION
             if hero.shotgun_reload_time < 0:
                 hero.shotgun_reloading = False
                 hero.shotgun_reload_time = 100
                 hero.shotgun_ammo = 8
 
         elif hero.state == 3 and hero.bazuka_reloading == True:
-            hero.bazuka_reload_time -= 1
+            hero.bazuka_reload_time -= 1* game_framework.frame_time*FRAMES_PER_ACTION
             if hero.bazuka_reload_time < 0:
                 hero.bazuka_reloading = False
                 hero.bazuka_reload_time = 100
@@ -117,11 +117,11 @@ class RunState:
         #지금 들고있는 총에따라 발사시간이 줄어든다.
         if hero.auto_fire == True:
             if hero.rifle_reloading == False and hero.state == 1:
-                hero.fire_timer -= hero.rifle_fire_speed
+                hero.fire_timer -= hero.rifle_fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
             if hero.auto_fire == True and hero.shotgun_reloading == False and hero.state == 2:
-                hero.fire_timer -= hero.shotgun_fire_speed
+                hero.fire_timer -= hero.shotgun_fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
             if hero.auto_fire == True and hero.bazuka_reloading == False and hero.state == 3:
-                hero.fire_timer -= hero.bazuka_fire_speed
+                hero.fire_timer -= hero.bazuka_fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
 
         #발사시간이 0이되면 발포. Hero의 발사클래스를 부르고 프레임을 바꿔 발포하는 애니매이션을 띄움
         if hero.fire_timer < 0:
@@ -131,15 +131,16 @@ class RunState:
 
         #적군총알과의 충돌체크
         for game_object in game_world.get_objects(3):
-            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2 and hero.immotal == False:
-                hero.HP -= game_object.damage
-                hero.immotal = True
+            if ((game_object.x - hero.x)**2 + (game_object.y - hero.y)**2 ) < 20**2:
+                if hero.immotal ==False:
+                    hero.HP -= game_object.damage
+                    hero.immotal = True
                 game_world.remove_object(game_object)
                 if hero.HP == 0:
                     game_framework.quit()
 
         if hero.immotal == True:
-            hero.immotal_time -= 1
+            hero.immotal_time -= 1* game_framework.frame_time*FRAMES_PER_ACTION
             if hero.immotal_time <0:
                 hero.immotal = False
                 hero.immotal_time = 100

@@ -25,7 +25,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
 # Hero Action Speed
 TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 60
 
 def get_distance(x1,y1,x2,y2):
     return (x1-x2)**2 + (y1-y2)**2
@@ -49,13 +49,19 @@ class Boss_right_arm:
     def update(self):
         global right_arm_state
         right_arm_state = self.state
-        self.fire_time = self.fire_time + self.fire_speed
+        self.fire_speed += game_framework.frame_time*FRAMES_PER_ACTION
+        if self.fire_speed > 1:
+            self.fire_speed = 0
+            self.fire_time+=1
+            self.degree += 1
+        #self.fire_time = self.fire_time + self.fire_speed * game_framework.frame_time*FRAMES_PER_ACTION
+        #self.degree = self.degree + 1 * game_framework.frame_time * FRAMES_PER_ACTION
         if int(self.fire_time)%300 == 0 and self.HP > 0:
             self.state = random.randint(1,6)
         elif self.HP < 0:
             self.state=0
 
-        self.degree = self.degree + 1
+
         if self.state == 0:
             self.x, self.y = self.body_x + 60, self.body_y - 80
             boss_pattern.pattern_0(self.fire_time,self.x, self.y, 1)
@@ -201,12 +207,17 @@ class Boss_left_arm:
     def update(self):
         global left_arm_state
         left_arm_state = self.state
-        self.fire_time = self.fire_time + self.fire_speed
+        self.fire_speed += game_framework.frame_time * FRAMES_PER_ACTION
+        if self.fire_speed > 1:
+            self.fire_speed = 0
+            self.fire_time += 1
+            self.degree += 1
+        #self.fire_time = self.fire_time + self.fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
         if int(self.fire_time) % 300 == 0 and self.HP > 0:
             self.state = random.randint(1, 6)
         elif self.HP < 0:
             self.state = 0
-        self.degree = self.degree + 1
+        #self.degree = self.degree + 1* game_framework.frame_time*FRAMES_PER_ACTION
         if self.state == 0:
             self.x, self.y = self.body_x - 60, self.body_y - 80
             boss_pattern.pattern_0(self.fire_time, self.x, self.y, 1)
@@ -354,12 +365,17 @@ class Boss:
 
 
     def update(self):
-        self.fire_time = self.fire_time + self.fire_speed
+        #self.fire_time = self.fire_time + self.fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
+        self.fire_speed += game_framework.frame_time * FRAMES_PER_ACTION
+        if self.fire_speed > 1:
+            self.fire_speed = 0
+            self.fire_time += 1
+            self.degree += 1
         if int(self.fire_time) % 300 == 0 and self.HP > 0 and self.state != 0:
             self.state = random.randint(1, 3)
         elif self.HP < 0:
             self.state = -1
-        self.degree = self.degree + 1
+        #self.degree = self.degree + 1* game_framework.frame_time*FRAMES_PER_ACTION
         Boss.body_update(self)
 
         if main_state.get_left_arm_state() == 0 and main_state.get_right_arm_state() == 0 and self.state == 0:
@@ -376,7 +392,7 @@ class Boss:
             boss_pattern.pattern_head_2(self.fire_time,self.x,self.y,2, self.degree)
 
 
-        if self.state != 0:
+        if self.state != -1:
             boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y + 50, 2)
             boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y - 50, 2)
             boss_pattern.pattern_tentacle(self.fire_time, self.x - 250, self.y + 50, 2)

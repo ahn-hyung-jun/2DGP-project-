@@ -12,6 +12,8 @@ GUN_SPEED_MPM = (GUN_SPEED_KMPH * 1000.0 / 60.0)
 GUN_SPEED_MPS = (GUN_SPEED_MPM / 60.0)
 GUN_SPEED_PPS = (GUN_SPEED_MPS * PIXEL_PER_METER)
 
+FRAMES_PER_ACTION = 60
+
 def get_distance(x1,y1,x2,y2):
     return (x1-x2)**2 + (y1-y2)**2
 
@@ -43,8 +45,13 @@ class Boss_bullet:
 
 
     def update(self):
-        self.fire_time += self.fire_speed
-        self.degree += 1
+        self.fire_speed += game_framework.frame_time * FRAMES_PER_ACTION
+        if self.fire_speed > 1:
+            self.fire_speed = 0
+            self.fire_time += 1
+            self.degree += 1
+        #self.fire_time += self.fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
+        #self.degree += 1* game_framework.frame_time*FRAMES_PER_ACTION
         self.x += math.cos(self.dir) *self.bullet_speed * game_framework.frame_time
         self.y += math.sin(self.dir) * self.bullet_speed * game_framework.frame_time
 

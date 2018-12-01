@@ -24,7 +24,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
 # Hero Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 60
 
 
 class Enemy:
@@ -72,9 +72,9 @@ class Enemy:
             self.timer += 1.0
             self.dir_to_move = random.random() * 2 * math.pi
         if self.state == 4:
-            self.fire_timer -= self.fire_speed
+            self.fire_timer -= self.fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
         elif self.state == 5:
-            self.fire_timer -= self.fire_speed_2
+            self.fire_timer -= self.fire_speed_2* game_framework.frame_time*FRAMES_PER_ACTION
         if self.fire_timer < 0:
             self.fire_bullet()
             self.fire_timer = 1000

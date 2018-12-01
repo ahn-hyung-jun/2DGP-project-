@@ -26,7 +26,7 @@ class Bullet:
         self.bazuka_sound = load_wav('Bazuka_sound.wav')
         self.bazuka_sound.set_volume(50)
         if state == -1:
-            self.damage = 10
+            self.damage = 5
             self.bullet_speed = GUN_SPEED_PPS*2
             self.rifle_sound.play()
         elif state == 0:

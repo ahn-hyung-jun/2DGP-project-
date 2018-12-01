@@ -25,7 +25,7 @@ def pattern_0(fire, x, y, state):
 
 def pattern_1(fire, x, y, state):
     dir = math.atan2(hero.find_y() - y, hero.find_x() - x)
-    if int(fire)%30 == 0:
+    if int(fire)%60 == 0:
         enemy = Enemy(x, y, random.randint(4,5))
         game_world.add_object(enemy, 1)
 
