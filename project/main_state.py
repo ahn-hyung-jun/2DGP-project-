@@ -14,6 +14,7 @@ from boss import Boss
 from boss import Boss_right_arm
 from boss import Boss_left_arm
 from cursor import Cursor
+from middle_boss import Middle_boss
 from enemy_genarate import Enemy_genarate
 
 name = "MainState"
@@ -33,30 +34,36 @@ def collide(a, b):
     return True
 
 def enter():
+    global boss_exist, middle_boss_exist
+    boss_exist = 0
+    middle_boss_exist = 0
     global boss_gauge
-    boss_gauge = 60
+    boss_gauge = 0
     global hero
     global cursor
     global boss
     global boss_right_arm
     global boss_left_arm
     global enemy_genarate
+    global middle_boss
+
 
     map = Map()
     cursor = Cursor()
     boss = Boss()
     boss_right_arm = Boss_right_arm()
     boss_left_arm = Boss_left_arm()
+    middle_boss = Middle_boss()
     hero = Hero()
 
     hide_cursor()
     game_world.add_object(map,0)
 
-    #enemy_genarate = Enemy_genarate()
+    enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
     game_world.add_object(cursor, 4)
 
-    #game_world.add_object(enemy_genarate, 0)
+    game_world.add_object(enemy_genarate, 0)
 
 def exit():
     game_world.clear()
@@ -92,11 +99,21 @@ def update():
         game_object.update()
 
     global boss_gauge
-    if boss_gauge == 60:
+    global middle_boss_exist
+    global boss_exist
+    if boss_gauge > 30 and middle_boss_exist==0:
+        game_world.add_object(middle_boss, 1)
+        middle_boss_exist = 1
+        boss_gauge+=1
+
+    if boss_gauge > 70 and middle_boss_exist == -1 and boss_exist == 0:
         game_world.add_object(boss, 1)
         game_world.add_object(boss_right_arm,1)
         game_world.add_object(boss_left_arm,1)
-        boss_gauge+=1
+        boss_exist = 1
+
+
+
 
     if hero.HP == 0:
         game_framework.change_state(fail_state)
@@ -111,6 +128,11 @@ def draw():
         game_object.draw()
     update_canvas()
 
+def get_boss_x():
+    return boss.x
+
+def get_boss_y():
+    return boss.y
 
 
 

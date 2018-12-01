@@ -1,7 +1,7 @@
 import random
 import json
 import os
-
+import main_state
 from pico2d import *
 
 import game_framework

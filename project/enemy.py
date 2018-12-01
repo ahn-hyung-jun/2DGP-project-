@@ -115,9 +115,9 @@ class Enemy:
         if self.HP <= 0:
             game_world.remove_object(self)
             main_state.boss_gauge += 1
-            if main_state.boss_gauge < 50:
+            if main_state.boss_gauge < 60:
                 enemy_genarate.Enemy_genarate.generate(self)
-                main_state.boss_gauge += 1
+
 
     def build_behavior_tree(self):
         find_hero_node = LeafNode("Find Hero", self.find_hero)

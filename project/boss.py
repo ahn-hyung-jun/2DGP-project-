@@ -16,7 +16,7 @@ from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 # Enemy Run Speed
 PIXEL_PER_METER =  (10.0/0.3)
-RUN_SPEED_KMPH = 10.0
+RUN_SPEED_KMPH = 5.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH*1000.0/60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM/60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS*PIXEL_PER_METER)
@@ -49,6 +49,7 @@ class Boss_right_arm:
 
     def update(self):
         global right_arm_state
+        self.body_x, self.body_y = main_state.get_boss_x(), main_state.get_boss_y()
         right_arm_state = self.state
         self.fire_speed += game_framework.frame_time*FRAMES_PER_ACTION
         if self.fire_speed > 1:
@@ -63,7 +64,7 @@ class Boss_right_arm:
             self.state=0
 
 
-        if self.state == 0:
+        if self.state == 0 or self.state == -1:
             self.x, self.y = self.body_x + 60, self.body_y - 80
             boss_pattern.pattern_0(self.fire_time,self.x, self.y, 1)
 
@@ -206,6 +207,7 @@ class Boss_left_arm:
         self.degree =1
 
     def update(self):
+        self.body_x, self.body_y = main_state.get_boss_x(), main_state.get_boss_y()
         global left_arm_state
         left_arm_state = self.state
         self.fire_speed += game_framework.frame_time * FRAMES_PER_ACTION
@@ -219,7 +221,7 @@ class Boss_left_arm:
         elif self.HP < 0:
             self.state = 0
         #self.degree = self.degree + 1* game_framework.frame_time*FRAMES_PER_ACTION
-        if self.state == 0:
+        if self.state == 0 or self.state == -1:
             self.x, self.y = self.body_x - 60, self.body_y - 80
             boss_pattern.pattern_0(self.fire_time, self.x, self.y, 1)
 
@@ -353,7 +355,7 @@ class Boss:
         self.body_image = load_image('boss-sprite.png')
         self.dir_body_to_hero = 0
         self.body_state = 0
-
+        self.dir = 1
         self.frame = 0
 
         self.state = 0
@@ -366,6 +368,13 @@ class Boss:
 
 
     def update(self):
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.x > 1000:
+            self.x = 800
+            self.dir = self.dir*-1
+        elif self.x<300:
+            self.x=300
+            self.dir = self.dir*-1
         #self.fire_time = self.fire_time + self.fire_speed* game_framework.frame_time*FRAMES_PER_ACTION
         self.fire_speed += game_framework.frame_time * FRAMES_PER_ACTION
         if self.fire_speed > 1:
@@ -397,7 +406,7 @@ class Boss:
             boss_pattern.pattern_head_3(self.fire_time,self.x, self.y, 6, self.degree)
 
 
-        if self.state != -1:
+        if self.state != 0:
             if self.HP < 2000:
                 boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y + 50, 0)
                 boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y - 50, 0)
@@ -419,7 +428,6 @@ class Boss:
 
     def draw(self):
         self.body_image.clip_composite_draw(280, 540-150, 280, 150, 0, '', self.x, self.y, 280*2.0, 150*2.0)
-
 
 
 

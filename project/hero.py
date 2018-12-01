@@ -146,9 +146,14 @@ class RunState:
                 hero.immotal_time = 100
         #실제 이동
         #if(hero.x < 1280 and hero.x > 0):
-        hero.x += hero.hor_speed*game_framework.frame_time
-        #if(hero.y < 1024 and hero.y > 0):
-        hero.y += hero.ver_speed*game_framework.frame_time
+        if hero.hor_speed > 0 and hero.x < 1230:
+            hero.x += hero.hor_speed*game_framework.frame_time
+        if hero.hor_speed < 0 and hero.x > 50:
+            hero.x += hero.hor_speed*game_framework.frame_time
+        if hero.ver_speed > 0 and hero.y < 994:
+            hero.y += hero.ver_speed*game_framework.frame_time
+        if hero.ver_speed < 0 and hero.y > 30:
+            hero.y += hero.ver_speed*game_framework.frame_time
 
         #Hero의 x,y값을 넘겨주기 휘함
         global x, y
@@ -172,7 +177,7 @@ next_state_table = {
 class Hero:
     def __init__(self):
         self.x, self.y = 1280 / 2, 1024/2
-        self.HP = 5
+        self.HP = 100
         self.image = load_image('hero_sprite.png')
         self.HP_image = load_image('HP.png')
         self.state = 1
@@ -189,7 +194,7 @@ class Hero:
         mouse_y = 0
 
         self.immotal = False
-        self.immotal_time = 100
+        self.immotal_time = 60
 
         self.rifle_sound = load_wav('Rifle_sound.wav')
         self.rifle_sound.set_volume(32)

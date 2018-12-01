@@ -84,8 +84,8 @@ class Boss_bullet:
                 game_world.add_object(bullet4, 3)
 
         if self.state == 6:
-            if int(self.fire_time) % 30 == 0:
-                self.dir += math.radians(60)
+            if int(self.fire_time) % 20 == 0:
+                self.dir += math.radians(45)
 
 
 
