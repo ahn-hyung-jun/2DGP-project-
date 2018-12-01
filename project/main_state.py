@@ -11,6 +11,7 @@ from hero import Hero
 from boss import Boss
 from boss import Boss_right_arm
 from boss import Boss_left_arm
+from cursor import Cursor
 from enemy_genarate import Enemy_genarate
 
 import hero
@@ -35,12 +36,14 @@ def enter():
     global boss_gauge
     boss_gauge = 0
     global hero
+    global cursor
     global boss
     global boss_right_arm
     global boss_left_arm
     global enemy_genarate
 
     map = Map()
+    cursor = Cursor()
     boss = Boss()
     boss_right_arm = Boss_right_arm()
     boss_left_arm = Boss_left_arm()
@@ -50,6 +53,7 @@ def enter():
     game_world.add_object(map,0)
     enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
+    game_world.add_object(cursor, 4)
 
     game_world.add_object(enemy_genarate, 0)
 
@@ -79,6 +83,7 @@ def handle_events():
                 game_framework.quit()
         else:
             hero.handle_event(event)
+            cursor.handle_event(event)
 
 
 def update():

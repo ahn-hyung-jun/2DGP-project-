@@ -169,7 +169,6 @@ class Hero:
         self.x, self.y = 1280 / 2, 1024/2
         self.HP = 100
         self.image = load_image('hero_sprite.png')
-        self.cursor_image = load_image('mouse.png')
         self.state = 1
         self.hor_speed = 0
         self.ver_speed = 0
@@ -269,7 +268,7 @@ class Hero:
             elif self.bazuka_reloading == True:
                 self.font.draw(self.x - 60, self.y + 50, '(B Reloading!)', (255, 255, 0))
 
-        self.cursor_image.clip_draw(0,0,100,100,mouse_x, mouse_y)
+
 
 
 
