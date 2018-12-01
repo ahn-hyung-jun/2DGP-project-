@@ -41,7 +41,7 @@ class Boss_right_arm:
         # self.right_arm_x, self.right_arm_y = 600,500
         self.right_arm_image = load_image('boss-arm.png')
         self.state = -1
-        self.fire_time = 0
+        self.fire_time = 1
         self.degree = 0
         self.fire_speed = 1
 
@@ -198,7 +198,7 @@ class Boss_left_arm:
         self.left_arm_image = load_image('boss-arm.png')
         self.state = -1
 
-        self.fire_time = 0
+        self.fire_time = 1
         self.degree = 0
         self.fire_speed = 1
 
@@ -351,7 +351,7 @@ class Boss:
         self.x , self.y  = 1280//2 , 800
         self.body_image = load_image('boss-sprite.png')
         self.dir_body_to_hero = 0
-        self.body_state = 1
+        self.body_state = 0
 
         self.frame = 0
 
@@ -361,7 +361,7 @@ class Boss:
         self.degree = 0
         self.fire_speed = 1
 
-        self.degree += 1
+        self.degree = 0
 
 
     def update(self):
@@ -373,6 +373,7 @@ class Boss:
             self.degree += 1
         if int(self.fire_time) % 300 == 0 and self.HP > 0 and self.state != 0:
             self.state = random.randint(1, 3)
+            pass
         elif self.HP < 0:
             self.state = -1
         #self.degree = self.degree + 1* game_framework.frame_time*FRAMES_PER_ACTION
@@ -391,12 +392,16 @@ class Boss:
         elif self.state == 2:
             boss_pattern.pattern_head_2(self.fire_time,self.x,self.y,2, self.degree)
 
+        elif self.state == 3:
+            boss_pattern.pattern_head_3(self.fire_time,self.x, self.y, 6, self.degree)
+
 
         if self.state != -1:
-            boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y + 50, 2)
-            boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y - 50, 2)
-            boss_pattern.pattern_tentacle(self.fire_time, self.x - 250, self.y + 50, 2)
-            boss_pattern.pattern_tentacle(self.fire_time, self.x - 250, self.y - 50, 2)
+            if self.HP < 2000:
+                boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y + 50, 0)
+                boss_pattern.pattern_tentacle(self.fire_time, self.x + 250, self.y - 50, 0)
+                boss_pattern.pattern_tentacle(self.fire_time, self.x - 250, self.y + 50, 0)
+                boss_pattern.pattern_tentacle(self.fire_time, self.x - 250, self.y - 50, 0)
             for hero_bullet in game_world.get_objects(2):
                 if ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y + 50))**2 ) < (PIXEL_PER_METER*2)**2 or \
                         ((hero_bullet.x - self.x)**2 + (hero_bullet.y - (self.y - 100))**2 ) < (PIXEL_PER_METER*2)**2 or \

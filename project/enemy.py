@@ -134,4 +134,4 @@ class Enemy:
         #self.image.clip_composite_draw(0, 800, 200, 200, self.dir_to_hero, '', self.x, self.y, 100, 100)
         self.image.clip_composite_draw(0, 1000 - 200 * self.state, 200, 200, self.dir_to_hero, '', self.x,
                                        self.y, 100, 100)
-        self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 100)' % self.HP, (255, 255, 0))
+        self.font.draw(self.x - 60, self.y + 50, '(B %3.2i / 20)' % self.HP, (255, 255, 0))

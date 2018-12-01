@@ -34,7 +34,7 @@ def collide(a, b):
 
 def enter():
     global boss_gauge
-    boss_gauge = 0
+    boss_gauge = 60
     global hero
     global cursor
     global boss
@@ -51,11 +51,12 @@ def enter():
 
     hide_cursor()
     game_world.add_object(map,0)
-    enemy_genarate = Enemy_genarate()
+
+    #enemy_genarate = Enemy_genarate()
     game_world.add_object(hero, 1)
     game_world.add_object(cursor, 4)
 
-    game_world.add_object(enemy_genarate, 0)
+    #game_world.add_object(enemy_genarate, 0)
 
 def exit():
     game_world.clear()
