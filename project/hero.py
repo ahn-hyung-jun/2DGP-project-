@@ -172,7 +172,7 @@ next_state_table = {
 class Hero:
     def __init__(self):
         self.x, self.y = 1280 / 2, 1024/2
-        self.HP = 100
+        self.HP = 5
         self.image = load_image('hero_sprite.png')
         self.HP_image = load_image('HP.png')
         self.state = 1

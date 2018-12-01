@@ -5,6 +5,7 @@
 # layer 3: Enemy bullet Objects
 # layer 4: Explosion
 
+
 objects = [[],[],[],[],[]]
 
 def add_object(o, layer):
@@ -18,9 +19,8 @@ def remove_object(o):
             break
 
 def clear():
-    for o in all_objects():
-        del o
-    objects.clear()
+    for l in objects:
+        l.clear()
 
 def all_objects():
     for i in range(len(objects)):

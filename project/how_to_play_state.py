@@ -24,6 +24,7 @@ def exit():
     del(image2)
 
 
+
 def update():
     pass
 
